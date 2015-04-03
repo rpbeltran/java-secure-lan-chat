@@ -17,13 +17,13 @@ public class FrontEnd {
 
 	public FrontEnd() {
 		
-		JFrame frame = new JFrame("Closed Kimono ver. "+Kimono.VERSION);
+		final JFrame frame = new JFrame("Closed Kimono ver. "+Kimono.VERSION);
 		
 		frame.setResizable(false);
 		
 		// First, set up a box for the functionality of the menu.
 		
-		Box initBox = Box.createVerticalBox();
+		final Box initBox = Box.createVerticalBox();
 		JButton save = new JButton("Save a message");
 		JButton load = new JButton("Load a message");
 		JButton logOut = new JButton("Log out");
@@ -42,7 +42,7 @@ public class FrontEnd {
 		
 		// One for a login screen.
 		
-		Box loginBox = Box.createVerticalBox();
+		final Box loginBox = Box.createVerticalBox();
 		
 		Box loginLabelBox = Box.createHorizontalBox();
 		JLabel loginLabel = new JLabel("Log in");
@@ -64,13 +64,13 @@ public class FrontEnd {
 		JLabel userLabel = new JLabel("Username:");
 		userBox.add(userLabel);
 		userBox.add(Box.createHorizontalGlue());
-		JTextField userField = new JTextField();
+		final JTextField userField = new JTextField();
 		
 		Box passBox = Box.createHorizontalBox();
 		JLabel passLabel = new JLabel("Password:");
 		passBox.add(passLabel);
 		passBox.add(Box.createHorizontalGlue());
-		JPasswordField passField = new JPasswordField();
+		final JPasswordField passField = new JPasswordField();
 		
 		userField.setPreferredSize(new Dimension(80,20));
 		passField.setPreferredSize(new Dimension(80,20));
@@ -91,7 +91,7 @@ public class FrontEnd {
 		
 		// One for the save screen.
 		
-		Box saveBox = Box.createVerticalBox();
+		final Box saveBox = Box.createVerticalBox();
 		
 		//userField.setMaximumSize(new Dimension(80,20));
 		//passField.setMaximumSize(new Dimension(80,20));
@@ -118,7 +118,7 @@ public class FrontEnd {
 		
 		// Then, one for the loading screen.
 		
-		Box loadBox = Box.createVerticalBox();
+		final Box loadBox = Box.createVerticalBox();
 		
 		Box messSelBox = Box.createHorizontalBox();
 		JLabel messSelLabel = new JLabel("Select message: ");
