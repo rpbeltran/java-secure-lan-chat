@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPasswordField;
@@ -18,33 +19,53 @@ public class FrontEnd {
 		
 		JFrame frame = new JFrame("Closed Kimono ver. "+Kimono.VERSION);
 		
+		frame.setResizable(false);
+		
 		// First, set up a box for the functionality of the menu.
 		
 		Box initBox = Box.createVerticalBox();
 		JButton save = new JButton("Save a message");
 		JButton load = new JButton("Load a message");
+		JButton logOut = new JButton("Log out");
 		
 		save.setPreferredSize(new Dimension(320,90));
 		load.setPreferredSize(new Dimension(320,90));
+		logOut.setPreferredSize(new Dimension(320,30));
 		
 		save.setMaximumSize(new Dimension(320,90));
 		load.setMaximumSize(new Dimension(320,90));
+		logOut.setMaximumSize(new Dimension(320,30));
 		
 		initBox.add(save);
 		initBox.add(load);
+		initBox.add(logOut);
 		
-		// Then, one for the loading screen.
+		// One for a login screen.
 		
-		Box loadBox = Box.createVerticalBox();
+		Box loginBox = Box.createVerticalBox();
 		
-		// And finally, one for the save screen.
+		Box loginLabelBox = Box.createHorizontalBox();
+		JLabel loginLabel = new JLabel("Log in");
+		loginLabel.setFont(loginLabel.getFont().deriveFont(20F));
+		loginLabelBox.add(loginLabel);
+		loginLabelBox.add(Box.createHorizontalGlue());
 		
-		Box saveBox = Box.createVerticalBox();
+		Box loginLabelBox1 = Box.createHorizontalBox();
+		JLabel loginDescLabel1 = new JLabel("This will save your messages under this username and password.");
+		loginLabelBox1.add(loginDescLabel1);
+		loginLabelBox1.add(Box.createHorizontalGlue());
+		
+		Box loginLabelBox2 = Box.createHorizontalBox();
+		JLabel loginDescLabel2 = new JLabel("Do not forget them; there is no recovery available.");
+		loginLabelBox2.add(loginDescLabel2);
+		loginLabelBox2.add(Box.createHorizontalGlue());
+		
 		Box userBox = Box.createHorizontalBox();
 		JLabel userLabel = new JLabel("Username:");
 		userBox.add(userLabel);
 		userBox.add(Box.createHorizontalGlue());
 		JTextField userField = new JTextField();
+		
 		Box passBox = Box.createHorizontalBox();
 		JLabel passLabel = new JLabel("Password:");
 		passBox.add(passLabel);
@@ -53,6 +74,24 @@ public class FrontEnd {
 		
 		userField.setPreferredSize(new Dimension(80,20));
 		passField.setPreferredSize(new Dimension(80,20));
+		
+		Box loginSubmitBox = Box.createHorizontalBox();
+		JButton loginButton = new JButton("Log in");
+		loginSubmitBox.add(loginButton);
+		loginSubmitBox.add(Box.createHorizontalGlue());
+		
+		loginBox.add(loginLabelBox);
+		loginBox.add(loginLabelBox1);
+		loginBox.add(loginLabelBox2);
+		loginBox.add(userBox);
+		loginBox.add(userField);
+		loginBox.add(passBox);
+		loginBox.add(passField);
+		loginBox.add(loginSubmitBox);
+		
+		// One for the save screen.
+		
+		Box saveBox = Box.createVerticalBox();
 		
 		//userField.setMaximumSize(new Dimension(80,20));
 		//passField.setMaximumSize(new Dimension(80,20));
@@ -66,20 +105,39 @@ public class FrontEnd {
 		messField.setPreferredSize(new Dimension(320,240));
 		
 		JButton saveButton = new JButton("Save");
-		JButton backButton = new JButton("Back");
+		JButton saveBackButton = new JButton("Back");
 		
-		saveBox.add(userBox);
-		saveBox.add(userField);
-		saveBox.add(passBox);
-		saveBox.add(passField);
 		saveBox.add(messBox);
 		saveBox.add(messField);
 		
-		Box hBox = Box.createHorizontalBox();
-		hBox.add(saveButton);
-		hBox.add(backButton);
-		hBox.add(Box.createHorizontalGlue());
-		saveBox.add(hBox);
+		Box saveBackBox = Box.createHorizontalBox();
+		saveBackBox.add(saveButton);
+		saveBackBox.add(saveBackButton);
+		saveBackBox.add(Box.createHorizontalGlue());
+		saveBox.add(saveBackBox);
+		
+		// Then, one for the loading screen.
+		
+		Box loadBox = Box.createVerticalBox();
+		
+		Box messSelBox = Box.createHorizontalBox();
+		JLabel messSelLabel = new JLabel("Select message: ");
+		JComboBox<String> messList = new JComboBox<String>();
+		JButton loadBackButton = new JButton("Back");
+		
+		messSelBox.add(messSelLabel);
+		messSelBox.add(messList);
+		loadBox.add(messSelBox);
+		
+		JTextArea messShow = new JTextArea();
+		messShow.setPreferredSize(new Dimension(320,240));
+		messShow.setEditable(false);
+		loadBox.add(messShow);
+		
+		Box loadBackBox = Box.createHorizontalBox();
+		loadBackBox.add(loadBackButton);
+		loadBackBox.add(Box.createHorizontalGlue());
+		loadBox.add(loadBackBox);
 		
 		// Set up action listener for the buttons
 		
@@ -90,9 +148,33 @@ public class FrontEnd {
 				JButton source = (JButton) ae.getSource();
 				
 				switch(source.getText()) {
+				case "Log in":
+					
+					//tell BackEnd the username and password, etc.
+					
+					//Then we make sure to clear the username / password fields.
+					
+					userField.setText("");
+					passField.setText("");
+					
+					frame.remove(loginBox);
+					frame.add(initBox);
+					frame.pack();
+					break;
+				case "Log out":
+					
+					//tell BackEnd to log the user out.
+					frame.remove(initBox);
+					frame.add(loginBox);
+					frame.pack();
+					break;
 				case "Save":
 					
 					//execute save code here
+					break;
+				case "Load":
+					
+					//execute load code here
 					break;
 				case "Back":
 					frame.remove(saveBox);
@@ -106,16 +188,23 @@ public class FrontEnd {
 					frame.pack();
 					break;
 				case "Load a message":
+					frame.remove(initBox);
+					frame.add(loadBox);
+					frame.pack();
+					break;
 				}
 			}
 		};
 		
 		saveButton.addActionListener(al);
-		backButton.addActionListener(al);
+		saveBackButton.addActionListener(al);
+		loadBackButton.addActionListener(al);
 		save.addActionListener(al);
 		load.addActionListener(al);
+		loginButton.addActionListener(al);
+		logOut.addActionListener(al);
 		
-		frame.add(initBox);
+		frame.add(loginBox);
 		frame.pack();
 		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
