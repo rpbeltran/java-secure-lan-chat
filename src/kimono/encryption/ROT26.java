@@ -1,13 +1,13 @@
 package kimono.encryption;
 
-public class ROT13 implements CryptoAlgorithm {
+public class ROT26 implements CryptoAlgorithm {
 	
 	@Override
 	public String encrypt(String message) {
 		String toReturn = "";
 		for(char c:message.toCharArray())
 			if(alphabetMixed.contains(""+c))
-				toReturn += alphabetMixed.charAt((alphabetMixed.indexOf(c)+26)%alphabetMixed.length());
+				toReturn += alphabetMixed.charAt((alphabetMixed.indexOf(c)+52)%alphabetMixed.length());
 			else
 				toReturn += c;
 		return toReturn;
