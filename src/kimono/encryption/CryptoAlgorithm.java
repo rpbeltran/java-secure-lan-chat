@@ -1,7 +1,7 @@
 package kimono.encryption;
 
 public interface CryptoAlgorithm {
-
+	
 	//Stored alphabets
 	String alphabetMixed = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ";
 	String alphabetLower = "abcdefghijklmnopqrstuvwxyz";

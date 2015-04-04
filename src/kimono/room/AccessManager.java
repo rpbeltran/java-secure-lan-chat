@@ -14,6 +14,7 @@ public class AccessManager {
 		this.owner = owner;
 		isOpen = isPublic;
 		allowedUsers = new ArrayList<User>();
+		allowedUsers.add(owner);
 	}
 	
 	public boolean getIsOpen(){

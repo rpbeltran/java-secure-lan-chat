@@ -42,7 +42,7 @@ public class RoomFile {
 	public List<String> readContent(){
 		try {
 			
-			 return Files.readAllLines(Paths.get("/path/to/file.txt"));
+			 return Files.readAllLines(Paths.get(filepath));
 			
 		} catch (Exception e) {
 			e.printStackTrace();
