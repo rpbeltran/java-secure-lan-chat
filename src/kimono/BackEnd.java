@@ -20,7 +20,7 @@ public class BackEnd {
 	}
 	
 	public void addMessage(String user, String msg) {
-		if (!theData.keySet().contains(word)) {
+		if (!theData.keySet().contains(user)) {
 			theData.put(user, new ArrayList<String>());
 		}
 		theData.get(user).add(msg);

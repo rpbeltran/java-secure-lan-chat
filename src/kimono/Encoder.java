@@ -9,8 +9,6 @@ public class Encoder {
 	
 	private int key = 0;
 	private File file = null;
-	private Scanner scanner = null;
-	private String content = null, decoded = null;
 	
 	public Encoder(String plainfilename, String password)
 	{
@@ -21,13 +19,7 @@ public class Encoder {
 	public Encoder(String plainfilename)
 	{
 		
-		try {
-			file = new File(plainfilename);
-			scanner = new Scanner(file);
-		} catch (Exception e) {	return;	}
 		
-		content = scanner.useDelimiter("\\Z").next();
-		decoded = decode(content);
 		
 	}
 	
