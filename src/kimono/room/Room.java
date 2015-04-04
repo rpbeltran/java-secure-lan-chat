@@ -1,6 +1,9 @@
 
 package kimono.room;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
 import kimono.encryption.*;
 
 public class Room {
@@ -11,23 +14,29 @@ public class Room {
 	public RoomFile roomFile;
 	public AccessManager accessManager;
 	public Settings settings;
+	private String roomAESKey;
 	
 	public Room(String name, User owner, int encryption, boolean isPrivate){
 		
 		roomName = name;
+		//Only for insecure test algorithms
 		roomKey = (int)(Math.random()*999);
+		
+		//Used for AES real encryption
+		SecureRandom random = new SecureRandom();
+		roomAESKey = new BigInteger(130, random).toString(32);
 		
 		switch(encryption){
 			case 0: encryptionType = new ROT26();
 			case 1: encryptionType = new ROT13();
 			case 2: encryptionType = new ROTKey();
+			case 3: encryptionType = new AES(roomAESKey);
 		}
 		
 		accessManager = new AccessManager(owner, !isPrivate);
 		roomFile = new RoomFile(buildFilename());
 		settings = new Settings();
 		
-		//TODO: Replace with better solution 
 		roomFile.writeOver("***Encryption: " + Integer.toHexString(encryption) + "\n");
 	}
 	
