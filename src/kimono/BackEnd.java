@@ -6,50 +6,43 @@ import java.util.List;
 
 public class BackEnd {
 	
-	//TODO: GO THROUGH NEW ROOM INTERFACE
+	private String username;
+	private String password;
+	private String chatroomname;
+	private String ip;
 	
-	private HashMap<String, List<String>> theData;
-	//Go through new room interface
-	//private Encoder encoder;
-	
-	public BackEnd(String filename) {
-		theData = new HashMap<String, List<String>>();
-		//Go through new room interface
-		//Encoder encoder = new Encoder(filename);
-		load();
+	public BackEnd(String username, String password, String ip) {
+		this.username = username;
+		this.password = password;
+		this.chatroomname = "";
+		this.ip = ip;
 	}
 	
-	public List<String> getMessages(String s) {
-		//Go through new room interface
-		return theData.get(s);
+	//Send message to current chatroom
+	public void sendMessage(String message){
+		if (chatroomname == "") return; //Not in chat room
+		//send message to server here
 	}
 	
-	public void addMessage(String user, String msg) {
+	//Join or instantiate a chat room
+	public void joinRoom(String roomname){
+		if (roomname == "") return;
+		chatroomname = roomname;
+		//connect to server here
+	}
+	
+	//Return a list of all recent messages
+	public List<HashMap<String,String>> getMessages() {
+		ArrayList<HashMap<String,String>> messages = new ArrayList<HashMap<String,String>>();
+		return messages;
 		
-		/* Go through new room interface
-
-		if (!theData.keySet().contains(user)) {
-			theData.put(user, new ArrayList<String>());
-		}
-		theData.get(user).add(msg);
-		save();
-		*/
 	}
 	
+	//Return a list of all users in the room
 	public List<String> getUsers() {
-		//Go through new room interface
-		ArrayList<String> userList = new ArrayList<String>();
-		userList.addAll(theData.keySet());
-		return userList;
-	}
-
-	public void save() {
-		//Go through new Room interface
-		//encoder.write(theData);
+		ArrayList<String> users = new ArrayList<String>();
+		return users;
+				
 	}
 	
-	public void load() {
-		//Go through new room interface
-		//theData = encoder.read();
-	}
 }
