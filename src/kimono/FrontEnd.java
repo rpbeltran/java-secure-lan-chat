@@ -206,7 +206,9 @@ public class FrontEnd {
 					passField.setText("");
 					
 					frame.remove(loginBox);
-					frame.add(initBox);
+					//frame.add(initBox);
+					frame.add(chatBox);
+					frame.setResizable(true);
 					frame.pack();
 				}
 				else if (source == logOut) {
@@ -230,7 +232,8 @@ public class FrontEnd {
 					frame.remove(saveBox);
 					frame.remove(loadBox);
 					frame.remove(chatBox);
-					frame.add(initBox);
+					//frame.add(initBox);
+					frame.add(loginBox);
 					frame.setResizable(false);
 					frame.pack();
 				}
