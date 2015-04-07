@@ -9,9 +9,14 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+
+import kimono.server.MakeServer;
 
 public class FrontEnd {
 
@@ -24,20 +29,24 @@ public class FrontEnd {
 		// First, set up a box for the functionality of the menu.
 		
 		final Box initBox = Box.createVerticalBox();
-		JButton save = new JButton("Save a message");
-		JButton load = new JButton("Load a message");
-		JButton logOut = new JButton("Log out");
+		final JButton save = new JButton("Save a message");
+		final JButton load = new JButton("Load a message");
+		final JButton chat = new JButton("Enter Chat");
+		final JButton logOut = new JButton("Log out");
 		
 		save.setPreferredSize(new Dimension(320,90));
 		load.setPreferredSize(new Dimension(320,90));
+		chat.setPreferredSize(new Dimension(320,90));
 		logOut.setPreferredSize(new Dimension(320,30));
 		
 		save.setMaximumSize(new Dimension(320,90));
 		load.setMaximumSize(new Dimension(320,90));
+		chat.setMaximumSize(new Dimension(320,90));
 		logOut.setMaximumSize(new Dimension(320,30));
 		
 		initBox.add(save);
 		initBox.add(load);
+		initBox.add(chat);
 		initBox.add(logOut);
 		
 		// One for a login screen.
@@ -76,8 +85,10 @@ public class FrontEnd {
 		passField.setPreferredSize(new Dimension(80,20));
 		
 		Box loginSubmitBox = Box.createHorizontalBox();
-		JButton loginButton = new JButton("Log in");
+		final JButton loginButton = new JButton("Log in");
+		final JButton serverButton = new JButton("Start Kimono Chat server");
 		loginSubmitBox.add(loginButton);
+		loginSubmitBox.add(serverButton);
 		loginSubmitBox.add(Box.createHorizontalGlue());
 		
 		loginBox.add(loginLabelBox);
@@ -104,8 +115,8 @@ public class FrontEnd {
 		
 		messField.setPreferredSize(new Dimension(320,240));
 		
-		JButton saveButton = new JButton("Save");
-		JButton saveBackButton = new JButton("Back");
+		final JButton saveButton = new JButton("Save");
+		final JButton saveBackButton = new JButton("Back");
 		
 		saveBox.add(messBox);
 		saveBox.add(messField);
@@ -123,7 +134,7 @@ public class FrontEnd {
 		Box messSelBox = Box.createHorizontalBox();
 		JLabel messSelLabel = new JLabel("Select message: ");
 		JComboBox<String> messList = new JComboBox<String>();
-		JButton loadBackButton = new JButton("Back");
+		final JButton loadBackButton = new JButton("Back");
 		
 		messSelBox.add(messSelLabel);
 		messSelBox.add(messList);
@@ -139,6 +150,44 @@ public class FrontEnd {
 		loadBackBox.add(Box.createHorizontalGlue());
 		loadBox.add(loadBackBox);
 		
+		// Chat init screen
+		
+		final Box chatBox = Box.createVerticalBox();
+		Box chatSideBox = Box.createVerticalBox();
+		
+		JComboBox<String> chooseChatBox = new JComboBox<String>();
+		chooseChatBox.setEditable(true);
+		final JButton joinChatButton = new JButton("Join / Create Chat Room");
+		chooseChatBox.setMaximumSize(new Dimension(2147483647,48));
+		JList<String> userList = new JList<String>();
+		
+		
+		chatSideBox.add(chooseChatBox);
+		chatSideBox.add(joinChatButton);
+		chatSideBox.add(userList);
+		
+		JScrollPane chatMessPane = new JScrollPane();
+		JTextArea chatMessArea = new JTextArea();
+		chatMessArea.setEditable(false);
+		
+		chatMessPane.add(chatMessArea);
+		
+		JSplitPane chatTop = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, chatMessPane, chatSideBox);
+		chatTop.setOneTouchExpandable(true);
+		chatTop.setDividerLocation(150);
+		
+		final JButton chatBackButton = new JButton("Back");
+		JTextField chatField = new JTextField();
+		chatField.setMaximumSize(new Dimension(2147483647,48));
+		final JButton chatSubmit = new JButton(">");
+		Box chatInitLoadBox = Box.createHorizontalBox();
+		chatInitLoadBox.add(chatField);
+		chatInitLoadBox.add(chatSubmit);
+		chatInitLoadBox.add(chatBackButton);
+		
+		chatBox.add(chatTop);
+		chatBox.add(chatInitLoadBox);
+		
 		// Set up action listener for the buttons
 		
 		ActionListener al = new ActionListener() {
@@ -147,8 +196,7 @@ public class FrontEnd {
 				
 				JButton source = (JButton) ae.getSource();
 				
-				switch(source.getText()) {
-				case "Log in":
+				if (source == loginButton) {
 					
 					//tell BackEnd the username and password, etc.
 					
@@ -160,38 +208,51 @@ public class FrontEnd {
 					frame.remove(loginBox);
 					frame.add(initBox);
 					frame.pack();
-					break;
-				case "Log out":
+				}
+				else if (source == logOut) {
 					
 					//tell BackEnd to log the user out.
 					frame.remove(initBox);
 					frame.add(loginBox);
 					frame.pack();
-					break;
-				case "Save":
+				}
+				else if (source == saveButton) {
 					
 					//execute save code here
-					break;
-				case "Load":
-					
-					//execute load code here
-					break;
-				case "Back":
+				}
+				else if (source == chat) {
+					frame.remove(initBox);
+					frame.add(chatBox);
+					frame.setResizable(true);
+					frame.pack();
+				}	
+				else if (source.getText().equals("Back")) {
 					frame.remove(saveBox);
 					frame.remove(loadBox);
+					frame.remove(chatBox);
 					frame.add(initBox);
+					frame.setResizable(false);
 					frame.pack();
-					break;
-				case "Save a message":
+				}
+				else if (source == save) {
 					frame.remove(initBox);
 					frame.add(saveBox);
 					frame.pack();
-					break;
-				case "Load a message":
+				}
+				else if (source == load) {
 					frame.remove(initBox);
 					frame.add(loadBox);
 					frame.pack();
-					break;
+				} 
+				else if (source == serverButton) {
+					frame.dispose();
+					
+					String username = userField.getText();
+					String password = passField.getText();
+					
+					userField.setText("");
+					passField.setText("");
+					new MakeServer(username, password);
 				}
 			}
 		};
@@ -199,9 +260,12 @@ public class FrontEnd {
 		saveButton.addActionListener(al);
 		saveBackButton.addActionListener(al);
 		loadBackButton.addActionListener(al);
+		chatBackButton.addActionListener(al);
 		save.addActionListener(al);
 		load.addActionListener(al);
+		chat.addActionListener(al);
 		loginButton.addActionListener(al);
+		serverButton.addActionListener(al);
 		logOut.addActionListener(al);
 		
 		frame.add(loginBox);

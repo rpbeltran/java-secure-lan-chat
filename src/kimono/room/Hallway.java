@@ -22,5 +22,20 @@ public class Hallway {
 		rooms = new ArrayList<Room>();
 
 	}
+	
+	public void addHallway(Hallway child){
+		hallways.add(child);
+	}
+	
+	public List<Hallway> getHallways(){
+		return hallways;
+	}
+	
+	public void addRoom(Room child){
+		rooms.add(child);
+	}
+	public List<Room> getRooms(){
+		return rooms;
+	}
 
 }
