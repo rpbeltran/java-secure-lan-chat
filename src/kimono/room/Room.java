@@ -16,7 +16,7 @@ public class Room {
 	public Settings settings;
 	private String roomAESKey;
 	
-	public Room(String name, User owner, int encryption, boolean isPrivate){
+	public Room(String name, User owner,  boolean isPrivate){
 		
 		roomName = name;
 		//Only for insecure test algorithms
@@ -26,18 +26,13 @@ public class Room {
 		SecureRandom random = new SecureRandom();
 		roomAESKey = new BigInteger(130, random).toString(32);
 		
-		switch(encryption){
-			case 0: encryptionType = new ROT26();
-			case 1: encryptionType = new ROT13();
-			case 2: encryptionType = new ROTKey();
-			case 3: encryptionType = new AES(roomAESKey);
-		}
+		encryptionType = new AES(roomAESKey);
 		
 		accessManager = new AccessManager(owner, !isPrivate);
 		roomFile = new RoomFile(buildFilename());
 		settings = new Settings();
 		
-		roomFile.writeOver("***Encryption: " + Integer.toHexString(encryption) + "\n");
+		roomFile.writeOver("***Encryption: Strong\n");
 	}
 	
 	public void recordMessage(User user, String message){

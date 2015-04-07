@@ -10,7 +10,7 @@ public class Tester {
 		User u = new User("User 1","password");
 		User i = new User("User 2","passkey");
 		
-		Room r = new Room("Test Room", u, 3, true);
+		Room r = new Room("Test Room", u, true);
 		r.accessManager.addAllowedUser(i);
 		
 		r.recordMessage(u, "Test Message");
