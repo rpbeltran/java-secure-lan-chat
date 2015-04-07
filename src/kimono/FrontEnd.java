@@ -16,6 +16,8 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import kimono.server.MakeServer;
+
 public class FrontEnd {
 
 	public FrontEnd() {

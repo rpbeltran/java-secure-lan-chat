@@ -2,9 +2,11 @@ package kimono.server;
 
 import javax.swing.JFrame;
 
+
+
 public class MakeServer {
 
-	public MakeServer() {
+	public MakeServer(String user, String password) {
 		
 		final JFrame frame = new JFrame("Start a closed kimono server");
 		
@@ -18,6 +20,8 @@ public class MakeServer {
 		
 	}
 	
-
+	public static void main(String[] args){
+		new MakeServer("hello","world");
+	}
 	
 }
