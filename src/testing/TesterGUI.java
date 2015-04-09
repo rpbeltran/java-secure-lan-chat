@@ -1,5 +1,6 @@
 package testing;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,6 +35,8 @@ public class TesterGUI {
 	
 	Box viewBox;
 	JTextArea messageView;
+	JTextField user;
+	JButton viewSubmit;
 	JButton viewBackBox;
 	
 	Room r;
@@ -102,6 +105,10 @@ public class TesterGUI {
 					frame.setResizable(true);
 					frame.pack();
 				}
+				else if(source == viewSubmit){
+					updateViewBox(user.getText());
+				
+				}
 				
 			}
 			
@@ -111,6 +118,7 @@ public class TesterGUI {
 		menuClose.addActionListener(al);
 		postBackButton.addActionListener(al);
 		postSubmitButton.addActionListener(al);
+		viewSubmit.addActionListener(al);
 		viewBackBox.addActionListener(al);
 	}
 	public void updateViewBox(){
@@ -119,7 +127,15 @@ public class TesterGUI {
 			if(!l.startsWith("***"))
 				t+=("\n"+r.encryptionType.decrypt(l, r.getRoomKey()));
 		}
-		System.out.println(t);
+		messageView.setText(t);
+	}
+	public void updateViewBox(String user){
+		String t = "";
+		for (String l:r.roomFile.readContent()){
+			if(!l.startsWith("***"))
+				if (r.encryptionType.decrypt(l, r.getRoomKey()).contains(user))
+				t+=("\n"+r.encryptionType.decrypt(l, r.getRoomKey()));
+		}
 		messageView.setText(t);
 	}
 	public Box makeViewBox(){
@@ -128,13 +144,27 @@ public class TesterGUI {
 		messageView = new JTextArea(5, 20);
 		messageView.setEditable(false);
 		messageView.setText("No messages");
+		messageView.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
+		user = new JTextField();
+		user.setPreferredSize(new Dimension(320,30));
+		user.setMaximumSize(new Dimension(320,30));
+		user.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
+		viewSubmit = new JButton("View from above user only");
+		viewSubmit.setMaximumSize(new Dimension(9999,30));
+		viewSubmit.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
 		viewBackBox = new JButton("Back");
 		viewBackBox.setPreferredSize(new Dimension(320,30));
-		viewBackBox.setMaximumSize(new Dimension(320,30));
-		
+		viewBackBox.setMaximumSize(new Dimension(9999,30));
+		viewBackBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		vb.add(user);
+		vb.add(viewSubmit);
 		vb.add(messageView);
 		vb.add(viewBackBox);
 		return vb;
+		
 	}
 	public Box makeMenuBox(){
 		Box mb = Box.createVerticalBox();
