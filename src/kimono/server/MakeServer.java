@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 
 
@@ -19,6 +20,8 @@ public class MakeServer {
 	JButton menuButton2;
 	JButton menuButton3;
 	JButton menuLogout;
+	
+	KimonoServer server;
 	
 	public MakeServer(String user, String password) {
 		
@@ -77,6 +80,14 @@ public class MakeServer {
 		mb.add(menuButton3);
 		mb.add(menuLogout);
 		return mb;
+	}
+	
+	public void displayError(String text) {
+		JOptionPane.showMessageDialog(frame, text, "Error!", JOptionPane.ERROR_MESSAGE);
+	}
+	
+	public void makeServer(int port) {
+		server = new KimonoServer(port);
 	}
 	
 	public static void main(String[] args){
