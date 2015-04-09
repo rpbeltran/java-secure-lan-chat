@@ -1,6 +1,8 @@
 package kimono.server;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -9,47 +11,72 @@ import javax.swing.JFrame;
 
 
 public class MakeServer {
-
+	
+	JFrame frame;
+	
+	Box menuBox;
+	JButton menuButton1;
+	JButton menuButton2;
+	JButton menuButton3;
+	JButton menuLogout;
+	
 	public MakeServer(String user, String password) {
 		
-		final JFrame frame = new JFrame("Start a closed kimono server");
+		frame = new JFrame("Start a closed kimono server");
 		
-		frame.add(buildMainBox());
+		menuBox=makeMenuBox();
+		
+		setupActionListeners();
+		
+		frame.add(menuBox);
 		
 		frame.setResizable(false);
-		
 		frame.pack();
-		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
-		frame.setVisible(true);
-		
-		
+		frame.setVisible(true);	
 		
 	}
 	
-	public Box buildMainBox(){
-		final Box initBox = Box.createVerticalBox();
-		final JButton save = new JButton("Modify Settings");
-		final JButton load = new JButton("Manage Users");
-		final JButton chat = new JButton("Export Messages");
-		final JButton logOut = new JButton("End Server");
+	public void setupActionListeners(){
+		ActionListener al = new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent ae) {
+				
+				JButton source = (JButton) ae.getSource();
+				
+				if(source == menuLogout){
+					frame.dispose();
+					System.exit(0);
+				}
+				
+			}
+			
+		};
+		menuLogout.addActionListener(al);
+	}
+	
+	public Box makeMenuBox(){
+		Box mb = Box.createVerticalBox();
+		menuButton1 = new JButton("Modify Settings");
+		menuButton2 = new JButton("Manage Users");
+		menuButton3 = new JButton("Export Messages");
+		menuLogout = new JButton("End Server");
 		
-		save.setPreferredSize(new Dimension(320,90));
-		load.setPreferredSize(new Dimension(320,90));
-		chat.setPreferredSize(new Dimension(320,90));
-		logOut.setPreferredSize(new Dimension(320,30));
+		menuButton1.setPreferredSize(new Dimension(320,90));
+		menuButton2.setPreferredSize(new Dimension(320,90));
+		menuButton3.setPreferredSize(new Dimension(320,90));
+		menuLogout.setPreferredSize(new Dimension(320,30));
 		
-		save.setMaximumSize(new Dimension(320,90));
-		load.setMaximumSize(new Dimension(320,90));
-		chat.setMaximumSize(new Dimension(320,90));
-		logOut.setMaximumSize(new Dimension(320,30));
+		menuButton1.setMaximumSize(new Dimension(320,90));
+		menuButton2.setMaximumSize(new Dimension(320,90));
+		menuButton3.setMaximumSize(new Dimension(320,90));
+		menuLogout.setMaximumSize(new Dimension(320,30));
 		
-		initBox.add(save);
-		initBox.add(load);
-		initBox.add(chat);
-		initBox.add(logOut);
-		return initBox;
+		mb.add(menuButton1);
+		mb.add(menuButton2);
+		mb.add(menuButton3);
+		mb.add(menuLogout);
+		return mb;
 	}
 	
 	public static void main(String[] args){

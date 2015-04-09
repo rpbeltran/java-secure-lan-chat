@@ -30,6 +30,7 @@ public class FrontEnd {
 	public static final int SIDEWIDTH = 200;
 	
 	final JFrame frame;
+	
 	final Box loginBox;
 	JButton loginButton;
 	JButton serverButton;
@@ -275,7 +276,7 @@ public class FrontEnd {
 	public Box makeLoginBox()
 
 	{
-		final Box loginBox = Box.createVerticalBox();
+		Box loginBox = Box.createVerticalBox();
 		Box loginLabelBox = Box.createHorizontalBox();
 		JLabel loginLabel = new JLabel("Log in");
 		loginLabel.setFont(loginLabel.getFont().deriveFont(20F));

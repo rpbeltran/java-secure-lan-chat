@@ -30,7 +30,7 @@ public class AccessManager {
 	}
 	
 	public boolean isUserAllowed(User user){
-		return allowedUsers.contains(user);
+		return allowedUsers.contains(user) || isOpen;
 	}
 	
 	public void addAllowedUser(User user){
