@@ -15,8 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPasswordField;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
@@ -149,7 +147,8 @@ public class FrontEnd {
 					
 					userField.setText("");
 					passField.setText("");
-					new MakeServer(username, password);
+					MakeServer myServer = new MakeServer(username, password);
+					myServer.makeServer(32800);
 				}
 			}
 		};
@@ -229,14 +228,17 @@ public class FrontEnd {
 		chooseChatBox.setMaximumSize(new Dimension(2147483647,48));
 		chooseChatBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 		chooseChatBox.setAlignmentY(Component.TOP_ALIGNMENT);
+		
 		joinChatButton.setMinimumSize(new Dimension(SIDEWIDTH, 48));
 		joinChatButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 		joinChatButton.setAlignmentY(Component.TOP_ALIGNMENT);
+		
 		ListModel<String> usernames = new DefaultListModel<String>();
 		JList<String> userList = new JList<String>(usernames);
 		userList.setAlignmentX(Component.LEFT_ALIGNMENT);
 		userList.setAlignmentY(Component.TOP_ALIGNMENT);
 		userList.setMinimumSize(new Dimension(SIDEWIDTH, 0));
+		
 		chatSideBox.add(chooseChatBox);
 		chatSideBox.add(joinChatButton);
 		chatSideBox.add(userList);
@@ -249,10 +251,12 @@ public class FrontEnd {
 		chatMessArea.setAlignmentX(Component.LEFT_ALIGNMENT);
 		chatMessPane.add(chatMessArea);
 		chatMessPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		chatMessPane.setAlignmentY(Component.TOP_ALIGNMENT);
 		Box chatTop = Box.createHorizontalBox();
 		chatTop.add(chatMessPane);
 		chatTop.add(chatSideBox);
 		chatTop.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
 		chatBackButton = new JButton("Back");
 		chatField = new JTextField();
 		chatField.setMaximumSize(new Dimension(2147483647,48));
