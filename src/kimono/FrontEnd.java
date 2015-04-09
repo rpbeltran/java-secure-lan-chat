@@ -28,215 +28,73 @@ public class FrontEnd {
 	public static final int STARTWIDTH = 600;
 	public static final int STARTHEIGHT = 400;
 	public static final int SIDEWIDTH = 200;
-
+	
+	final JFrame frame;
+	final Box loginBox;
+	JButton loginButton;
+	JButton serverButton;
+	JTextField userField = new JTextField();
+	JPasswordField passField = new JPasswordField();
+	
+	Box chatBox;
+	JButton chatBackButton;
+	JTextField chatField;
+	JButton chatSubmit;
+	
+	Box loadBox;
+	JButton loadBackButton;
+	
+	Box saveBox;
+	JButton saveButton;
+	JButton saveBackButton;
+	
+	Box initBox;
+	JButton save = new JButton("Save a message");
+	JButton load = new JButton("Load a message");
+	JButton chat = new JButton("Enter Chat");
+	JButton logOut = new JButton("Log out");
+	
 	public FrontEnd() {
 		
-		final JFrame frame = new JFrame("Closed Kimono ver. "+Kimono.VERSION);
-		
+		//Make a blank JFrame
+		frame = new JFrame("Closed Kimono ver. "+Kimono.VERSION);
 		frame.setResizable(false);
 		
-		// First, set up a box for the functionality of the menu.
+		//Menu screen
+		initBox = makeMenuBox();
 		
-		final Box initBox = Box.createVerticalBox();
-		final JButton save = new JButton("Save a message");
-		final JButton load = new JButton("Load a message");
-		final JButton chat = new JButton("Enter Chat");
-		final JButton logOut = new JButton("Log out");
+		//Login screen.
+		loginBox = makeLoginBox(); 
+				
+		//Save screen.
+		saveBox = makeSaveBox();
 		
-		save.setPreferredSize(new Dimension(320,90));
-		load.setPreferredSize(new Dimension(320,90));
-		chat.setPreferredSize(new Dimension(320,90));
-		logOut.setPreferredSize(new Dimension(320,30));
-		
-		save.setMaximumSize(new Dimension(320,90));
-		load.setMaximumSize(new Dimension(320,90));
-		chat.setMaximumSize(new Dimension(320,90));
-		logOut.setMaximumSize(new Dimension(320,30));
-		
-		initBox.add(save);
-		initBox.add(load);
-		initBox.add(chat);
-		initBox.add(logOut);
-		
-		// One for a login screen.
-		
-		final Box loginBox = Box.createVerticalBox();
-		
-		Box loginLabelBox = Box.createHorizontalBox();
-		JLabel loginLabel = new JLabel("Log in");
-		loginLabel.setFont(loginLabel.getFont().deriveFont(20F));
-		loginLabelBox.add(loginLabel);
-		loginLabelBox.add(Box.createHorizontalGlue());
-		
-		Box loginLabelBox1 = Box.createHorizontalBox();
-		JLabel loginDescLabel1 = new JLabel("This will save your messages under this username and password.");
-		loginLabelBox1.add(loginDescLabel1);
-		loginLabelBox1.add(Box.createHorizontalGlue());
-		
-		Box loginLabelBox2 = Box.createHorizontalBox();
-		JLabel loginDescLabel2 = new JLabel("Do not forget them; there is no recovery available.");
-		loginLabelBox2.add(loginDescLabel2);
-		loginLabelBox2.add(Box.createHorizontalGlue());
-		
-		Box userBox = Box.createHorizontalBox();
-		JLabel userLabel = new JLabel("Username:");
-		userBox.add(userLabel);
-		userBox.add(Box.createHorizontalGlue());
-		final JTextField userField = new JTextField();
-		
-		Box passBox = Box.createHorizontalBox();
-		JLabel passLabel = new JLabel("Password:");
-		passBox.add(passLabel);
-		passBox.add(Box.createHorizontalGlue());
-		final JPasswordField passField = new JPasswordField();
-		
-		userField.setPreferredSize(new Dimension(80,20));
-		passField.setPreferredSize(new Dimension(80,20));
-		
-		Box loginSubmitBox = Box.createHorizontalBox();
-		final JButton loginButton = new JButton("Log in");
-		final JButton serverButton = new JButton("Start Kimono Chat server");
-		loginSubmitBox.add(loginButton);
-		loginSubmitBox.add(serverButton);
-		loginSubmitBox.add(Box.createHorizontalGlue());
-		
-		loginBox.add(loginLabelBox);
-		loginBox.add(loginLabelBox1);
-		loginBox.add(loginLabelBox2);
-		loginBox.add(userBox);
-		loginBox.add(userField);
-		loginBox.add(passBox);
-		loginBox.add(passField);
-		loginBox.add(loginSubmitBox);
-		
-		// One for the save screen.
-		
-		final Box saveBox = Box.createVerticalBox();
-		
-		//userField.setMaximumSize(new Dimension(80,20));
-		//passField.setMaximumSize(new Dimension(80,20));
-		
-		Box messBox = Box.createHorizontalBox();
-		JLabel messLabel = new JLabel("Message:");
-		messBox.add(messLabel);
-		messBox.add(Box.createHorizontalGlue());
-		JTextArea messField = new JTextArea();
-		
-		messField.setPreferredSize(new Dimension(320,240));
-		
-		final JButton saveButton = new JButton("Save");
-		final JButton saveBackButton = new JButton("Back");
-		
-		saveBox.add(messBox);
-		saveBox.add(messField);
-		
-		Box saveBackBox = Box.createHorizontalBox();
-		saveBackBox.add(saveButton);
-		saveBackBox.add(saveBackButton);
-		saveBackBox.add(Box.createHorizontalGlue());
-		saveBox.add(saveBackBox);
-		
-		// Then, one for the loading screen.
-		
-		final Box loadBox = Box.createVerticalBox();
-		
-		Box messSelBox = Box.createHorizontalBox();
-		JLabel messSelLabel = new JLabel("Select message: ");
-		JComboBox<String> messList = new JComboBox<String>();
-		final JButton loadBackButton = new JButton("Back");
-		
-		messSelBox.add(messSelLabel);
-		messSelBox.add(messList);
-		loadBox.add(messSelBox);
-		
-		JTextArea messShow = new JTextArea();
-		messShow.setPreferredSize(new Dimension(320,240));
-		messShow.setEditable(false);
-		loadBox.add(messShow);
-		
-		Box loadBackBox = Box.createHorizontalBox();
-		loadBackBox.add(loadBackButton);
-		loadBackBox.add(Box.createHorizontalGlue());
-		loadBox.add(loadBackBox);
+		//Loading screen.
+		loadBox = getLoadBox();
 		
 		// Chat init screen
-		
-		
-		
-		final Box chatBox = Box.createVerticalBox();
-		Box chatSideBox = Box.createVerticalBox();
-		
-		JComboBox<String> chooseChatBox = new JComboBox<String>();
-		chooseChatBox.setEditable(true);
-		final JButton joinChatButton = new JButton("Join / Create Chat Room");
-		chooseChatBox.setMaximumSize(new Dimension(2147483647,48));
-		chooseChatBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-		chooseChatBox.setAlignmentY(Component.TOP_ALIGNMENT);
-		joinChatButton.setMinimumSize(new Dimension(SIDEWIDTH, 48));
-		joinChatButton.setAlignmentX(Component.LEFT_ALIGNMENT);
-		joinChatButton.setAlignmentY(Component.TOP_ALIGNMENT);
-		
-		ListModel<String> usernames = new DefaultListModel<String>();
-		
-		JList<String> userList = new JList<String>(usernames);
-		userList.setAlignmentX(Component.LEFT_ALIGNMENT);
-		userList.setAlignmentY(Component.TOP_ALIGNMENT);
-		userList.setMinimumSize(new Dimension(SIDEWIDTH, 0));
-		
-		chatSideBox.add(chooseChatBox);
-		chatSideBox.add(joinChatButton);
-		chatSideBox.add(userList);
-		chatSideBox.setMinimumSize(new Dimension(SIDEWIDTH, 48));
-		chatSideBox.setMaximumSize(new Dimension(SIDEWIDTH, 2147483647));
-		chatSideBox.setAlignmentY(Component.TOP_ALIGNMENT);
-		
-		Box chatMessPane = Box.createVerticalBox();
-		JTextArea chatMessArea = new JTextArea();
-		chatMessArea.setEditable(false);
-		chatMessArea.setAlignmentX(Component.LEFT_ALIGNMENT);
-		chatMessPane.add(chatMessArea);
-		chatMessPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
-		Box chatTop = Box.createHorizontalBox();
-		chatTop.add(chatMessPane);
-		chatTop.add(chatSideBox);
-		chatTop.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
-		final JButton chatBackButton = new JButton("Back");
-		JTextField chatField = new JTextField();
-		chatField.setMaximumSize(new Dimension(2147483647,48));
-		chatField.setMinimumSize(new Dimension(10,48));
-		final JButton chatSubmit = new JButton(">");
-		chatSubmit.setMinimumSize(new Dimension(48,48));
-		Box chatInitLoadBox = Box.createHorizontalBox();
-		chatInitLoadBox.add(chatField);
-		chatInitLoadBox.add(chatSubmit);
-		chatInitLoadBox.add(chatBackButton);
-		chatInitLoadBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
-		
-		chatBox.add(chatTop);
-		chatBox.add(chatInitLoadBox);
-		chatBox.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
-		chatBox.setMinimumSize(new Dimension(300,200));
-		frame.setMinimumSize(new Dimension(300,200));
-		chatBox.setPreferredSize(new Dimension(STARTWIDTH,STARTHEIGHT));
-		
+		chatBox = makeChatBox();
+			
 		// Set up action listener for the buttons
+		setupActionListeners();
 		
+		
+		//Intialize GUI
+		frame.add(loginBox);
+		frame.pack();
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setVisible(true);
+		
+	}
+	
+	public void setupActionListeners(){
 		ActionListener al = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
 				
 				JButton source = (JButton) ae.getSource();
 				
-				if (source == loginButton) {
-					
-					//tell BackEnd the username and password, etc.
-					
-					//Then we make sure to clear the username / password fields.
-					
+				if (source == loginButton){
 					userField.setText("");
 					passField.setText("");
 					
@@ -246,7 +104,7 @@ public class FrontEnd {
 					frame.setResizable(true);
 					frame.pack();
 				}
-				else if (source == logOut) {
+				if (source == logOut) {
 					
 					//tell BackEnd to log the user out.
 					frame.remove(initBox);
@@ -294,7 +152,7 @@ public class FrontEnd {
 				}
 			}
 		};
-		
+		loginButton.addActionListener(al);
 		saveButton.addActionListener(al);
 		saveBackButton.addActionListener(al);
 		loadBackButton.addActionListener(al);
@@ -302,17 +160,187 @@ public class FrontEnd {
 		save.addActionListener(al);
 		load.addActionListener(al);
 		chat.addActionListener(al);
-		loginButton.addActionListener(al);
 		serverButton.addActionListener(al);
 		logOut.addActionListener(al);
+	}
+	
+	public Box makeMenuBox(){
+		Box ib = Box.createVerticalBox();
+		save = new JButton("Save a message");
+		load = new JButton("Load a message");
+		chat = new JButton("Enter Chat");
+		logOut = new JButton("Log out");
 		
-		frame.add(loginBox);
-		frame.pack();
+		save.setPreferredSize(new Dimension(320,90));
+		load.setPreferredSize(new Dimension(320,90));
+		chat.setPreferredSize(new Dimension(320,90));
+		logOut.setPreferredSize(new Dimension(320,30));
 		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		save.setMaximumSize(new Dimension(320,90));
+		load.setMaximumSize(new Dimension(320,90));
+		chat.setMaximumSize(new Dimension(320,90));
+		logOut.setMaximumSize(new Dimension(320,30));
 		
-		frame.setVisible(true);
+		ib.add(save);
+		ib.add(load);
+		ib.add(chat);
+		ib.add(logOut);
 		
+		return ib;
+	}
+	
+	public Box makeSaveBox(){
+		Box sb = Box.createVerticalBox();
+		
+		//userField.setMaximumSize(new Dimension(80,20));
+		//passField.setMaximumSize(new Dimension(80,20));
+		
+		Box messBox = Box.createHorizontalBox();
+		JLabel messLabel = new JLabel("Message:");
+		messBox.add(messLabel);
+		messBox.add(Box.createHorizontalGlue());
+		JTextArea messField = new JTextArea();
+		
+		messField.setPreferredSize(new Dimension(320,240));
+		
+		saveButton = new JButton("Save");
+		saveBackButton = new JButton("Back");
+		
+		sb.add(messBox);
+		sb.add(messField);
+		
+		Box saveBackBox = Box.createHorizontalBox();
+		saveBackBox.add(saveButton);
+		saveBackBox.add(saveBackButton);
+		saveBackBox.add(Box.createHorizontalGlue());
+		sb.add(saveBackBox);
+		
+		return sb;
+	}
+	
+	public Box makeChatBox()
+	{
+		Box cb = Box.createVerticalBox();
+		Box chatSideBox = Box.createVerticalBox();
+		JComboBox<String> chooseChatBox = new JComboBox<String>();
+		chooseChatBox.setEditable(true);
+		final JButton joinChatButton = new JButton("Join / Create Chat Room");
+		chooseChatBox.setMaximumSize(new Dimension(2147483647,48));
+		chooseChatBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		chooseChatBox.setAlignmentY(Component.TOP_ALIGNMENT);
+		joinChatButton.setMinimumSize(new Dimension(SIDEWIDTH, 48));
+		joinChatButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+		joinChatButton.setAlignmentY(Component.TOP_ALIGNMENT);
+		ListModel<String> usernames = new DefaultListModel<String>();
+		JList<String> userList = new JList<String>(usernames);
+		userList.setAlignmentX(Component.LEFT_ALIGNMENT);
+		userList.setAlignmentY(Component.TOP_ALIGNMENT);
+		userList.setMinimumSize(new Dimension(SIDEWIDTH, 0));
+		chatSideBox.add(chooseChatBox);
+		chatSideBox.add(joinChatButton);
+		chatSideBox.add(userList);
+		chatSideBox.setMinimumSize(new Dimension(SIDEWIDTH, 48));
+		chatSideBox.setMaximumSize(new Dimension(SIDEWIDTH, 2147483647));
+		chatSideBox.setAlignmentY(Component.TOP_ALIGNMENT);
+		Box chatMessPane = Box.createVerticalBox();
+		JTextArea chatMessArea = new JTextArea();
+		chatMessArea.setEditable(false);
+		chatMessArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+		chatMessPane.add(chatMessArea);
+		chatMessPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		Box chatTop = Box.createHorizontalBox();
+		chatTop.add(chatMessPane);
+		chatTop.add(chatSideBox);
+		chatTop.setAlignmentX(Component.LEFT_ALIGNMENT);
+		chatBackButton = new JButton("Back");
+		chatField = new JTextField();
+		chatField.setMaximumSize(new Dimension(2147483647,48));
+		chatField.setMinimumSize(new Dimension(10,48));
+		chatSubmit = new JButton(">");
+		chatSubmit.setMinimumSize(new Dimension(48,48));
+		Box chatInitLoadBox = Box.createHorizontalBox();
+		chatInitLoadBox.add(chatField);
+		chatInitLoadBox.add(chatSubmit);
+		chatInitLoadBox.add(chatBackButton);
+		chatInitLoadBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		cb.add(chatTop);
+		cb.add(chatInitLoadBox);
+		cb.setAlignmentX(Component.LEFT_ALIGNMENT);
+		cb.setMinimumSize(new Dimension(300,200));
+		frame.setMinimumSize(new Dimension(300,200));
+		cb.setPreferredSize(new Dimension(STARTWIDTH,STARTHEIGHT));		
+		return cb;
+	}
+	
+	public Box makeLoginBox()
+
+	{
+		final Box loginBox = Box.createVerticalBox();
+		Box loginLabelBox = Box.createHorizontalBox();
+		JLabel loginLabel = new JLabel("Log in");
+		loginLabel.setFont(loginLabel.getFont().deriveFont(20F));
+		loginLabelBox.add(loginLabel);
+		loginLabelBox.add(Box.createHorizontalGlue());
+		Box loginLabelBox1 = Box.createHorizontalBox();
+		JLabel loginDescLabel1 = new JLabel("This will save your messages under this username and password.");
+		loginLabelBox1.add(loginDescLabel1);
+		loginLabelBox1.add(Box.createHorizontalGlue());
+		Box loginLabelBox2 = Box.createHorizontalBox();
+		JLabel loginDescLabel2 = new JLabel("Do not forget them; there is no recovery available.");
+		loginLabelBox2.add(loginDescLabel2);
+		loginLabelBox2.add(Box.createHorizontalGlue());
+		Box userBox = Box.createHorizontalBox();
+		JLabel userLabel = new JLabel("Username:");
+		userBox.add(userLabel);
+		userBox.add(Box.createHorizontalGlue());
+		userField = new JTextField();
+		Box passBox = Box.createHorizontalBox();
+		JLabel passLabel = new JLabel("Password:");
+		passBox.add(passLabel);
+		passBox.add(Box.createHorizontalGlue());
+		passField = new JPasswordField();
+		userField.setPreferredSize(new Dimension(80,20));
+		passField.setPreferredSize(new Dimension(80,20));
+		Box loginSubmitBox = Box.createHorizontalBox();
+		loginButton = new JButton("Log in");
+		serverButton = new JButton("Start Kimono Chat server");
+		loginSubmitBox.add(loginButton);
+		loginSubmitBox.add(serverButton);
+		loginSubmitBox.add(Box.createHorizontalGlue());
+		loginBox.add(loginLabelBox);
+		loginBox.add(loginLabelBox1);
+		loginBox.add(loginLabelBox2);
+		loginBox.add(userBox);
+		loginBox.add(userField);
+		loginBox.add(passBox);
+		loginBox.add(passField);
+		loginBox.add(loginSubmitBox);
+		return loginBox;
+	}
+
+	public Box getLoadBox()
+{
+		Box lb = Box.createVerticalBox();
+		
+		Box messSelBox = Box.createHorizontalBox();
+		JLabel messSelLabel = new JLabel("Select message: ");
+		JComboBox<String> messList = new JComboBox<String>();
+		loadBackButton = new JButton("Back");
+		
+		messSelBox.add(messSelLabel);
+		messSelBox.add(messList);
+		lb.add(messSelBox);
+		
+		JTextArea messShow = new JTextArea();
+		messShow.setPreferredSize(new Dimension(320,240));
+		messShow.setEditable(false);
+		lb.add(messShow);
+		
+		Box loadBackBox = Box.createHorizontalBox();
+		loadBackBox.add(loadBackButton);
+		loadBackBox.add(Box.createHorizontalGlue());
+		lb.add(loadBackBox);
+		return lb;
 	}
 	
 }
