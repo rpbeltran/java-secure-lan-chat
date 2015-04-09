@@ -5,12 +5,14 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -18,6 +20,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
+import javax.swing.text.MaskFormatter;
 
 import kimono.server.MakeServer;
 
@@ -33,7 +36,11 @@ public class FrontEnd {
 	JButton loginButton;
 	JButton serverButton;
 	JTextField userField = new JTextField();
+	JFormattedTextField ipField;
+	JFormattedTextField portField;
 	JPasswordField passField = new JPasswordField();
+	NumberFormat ipFormat;
+	NumberFormat portFormat;
 	
 	Box chatBox;
 	JButton chatBackButton;
@@ -52,6 +59,8 @@ public class FrontEnd {
 	JButton load = new JButton("Load a message");
 	JButton chat = new JButton("Enter Chat");
 	JButton logOut = new JButton("Log out");
+	
+	BackEnd backend;
 	
 	public FrontEnd() {
 		
@@ -78,11 +87,17 @@ public class FrontEnd {
 		setupActionListeners();
 		
 		
-		//Intialize GUI
+		//Initialize GUI
 		frame.add(loginBox);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
+		
+		
+		
+	}
+	
+	public void sendMessage() {
 		
 	}
 	
@@ -94,8 +109,17 @@ public class FrontEnd {
 				JButton source = (JButton) ae.getSource();
 				
 				if (source == loginButton){
+					String username = userField.getText();
+					String password = new String(passField.getPassword());
+					String hostname = ipField.getText();
+					int port = Integer.parseInt(portField.getText());
+					
+					backend = new BackEnd(username, password, hostname, port);
+					
 					userField.setText("");
 					passField.setText("");
+					
+					
 					
 					frame.remove(loginBox);
 					//frame.add(initBox);
@@ -150,6 +174,9 @@ public class FrontEnd {
 					MakeServer myServer = new MakeServer(username, password);
 					myServer.makeServer(32800);
 				}
+				else if (source == chatSubmit) {
+					sendMessage();
+				}
 			}
 		};
 		loginButton.addActionListener(al);
@@ -162,6 +189,18 @@ public class FrontEnd {
 		chat.addActionListener(al);
 		serverButton.addActionListener(al);
 		logOut.addActionListener(al);
+		chatSubmit.addActionListener(al);
+		
+		ActionListener alt = new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				JTextField source = (JTextField) arg0.getSource();
+				if (source == chatField) {
+					sendMessage();
+				}
+			}
+			
+		};
+		chatField.addActionListener(alt);
 	}
 	
 	public Box makeMenuBox(){
@@ -294,11 +333,13 @@ public class FrontEnd {
 		JLabel loginDescLabel2 = new JLabel("Do not forget them; there is no recovery available.");
 		loginLabelBox2.add(loginDescLabel2);
 		loginLabelBox2.add(Box.createHorizontalGlue());
+		
 		Box userBox = Box.createHorizontalBox();
 		JLabel userLabel = new JLabel("Username:");
 		userBox.add(userLabel);
 		userBox.add(Box.createHorizontalGlue());
 		userField = new JTextField();
+		
 		Box passBox = Box.createHorizontalBox();
 		JLabel passLabel = new JLabel("Password:");
 		passBox.add(passLabel);
@@ -306,6 +347,25 @@ public class FrontEnd {
 		passField = new JPasswordField();
 		userField.setPreferredSize(new Dimension(80,20));
 		passField.setPreferredSize(new Dimension(80,20));
+		
+		Box ipBox = Box.createHorizontalBox();
+		JLabel ipLabel = new JLabel("Server Hostname:");
+		ipBox.add(ipLabel);
+		ipBox.add(Box.createHorizontalGlue());
+		
+		Box hostBox = Box.createHorizontalBox();
+		ipField = new JFormattedTextField(createFormatter("###.###.###.###"));
+		
+		JLabel portLabel = new JLabel("Port:");
+		portField = new JFormattedTextField(createFormatter("######"));
+		
+		hostBox.add(ipField);
+		hostBox.add(Box.createHorizontalStrut(50));
+		hostBox.add(portLabel);
+		hostBox.add(Box.createHorizontalStrut(5));
+		hostBox.add(portField);
+		
+		
 		Box loginSubmitBox = Box.createHorizontalBox();
 		loginButton = new JButton("Log in");
 		serverButton = new JButton("Start Kimono Chat server");
@@ -319,8 +379,21 @@ public class FrontEnd {
 		loginBox.add(userField);
 		loginBox.add(passBox);
 		loginBox.add(passField);
+		loginBox.add(ipBox);
+		loginBox.add(hostBox);
 		loginBox.add(loginSubmitBox);
 		return loginBox;
+	}
+	
+	protected MaskFormatter createFormatter(String s) {
+	    MaskFormatter formatter = null;
+	    try {
+	        formatter = new MaskFormatter(s);
+	    } catch (java.text.ParseException exc) {
+	        System.err.println("formatter is bad: " + exc.getMessage());
+	        System.exit(-1);
+	    }
+	    return formatter;
 	}
 
 	public Box getLoadBox()
