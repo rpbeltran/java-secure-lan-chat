@@ -143,7 +143,7 @@ public class FrontEnd {
 					frame.dispose();
 					
 					String username = userField.getText();
-					String password = passField.getText();
+					String password = new String(passField.getPassword());
 					
 					userField.setText("");
 					passField.setText("");

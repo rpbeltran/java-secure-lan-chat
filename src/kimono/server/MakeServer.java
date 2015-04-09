@@ -87,11 +87,7 @@ public class MakeServer {
 	}
 	
 	public void makeServer(int port) {
-		server = new KimonoServer(port);
-	}
-	
-	public static void main(String[] args){
-		new MakeServer("hello","world");
+		server = new KimonoServer(port, this);
 	}
 	
 }

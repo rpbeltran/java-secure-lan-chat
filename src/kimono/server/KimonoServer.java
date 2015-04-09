@@ -8,11 +8,14 @@ public class KimonoServer {
 	ServerSocket serverSocket;
 	MakeServer serverGUI;
 	
-	public KimonoServer(int port) {
+	ConnectionThread connectionThread;
+	
+	public KimonoServer(int port, MakeServer makeServer) {
+		serverGUI = makeServer;
 		try {
 			serverSocket = new ServerSocket(port);
 		} catch (IOException e) {
-			serverGUI.displayError("IOException thrown. Please check console.\nTry closing any other programs using the port "+port+".");
+			serverGUI.displayError("IOException thrown. Please check console.\nTry closing any other programs using the port "+port+".\nException specified: "+e.toString());
 			e.printStackTrace();
 		}
 	}
