@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.UnknownHostException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
@@ -16,6 +18,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -107,7 +110,15 @@ public class FrontEnd {
 		String hostname = ipField.getText();
 		int port = Integer.parseInt(portField.getText());
 		
-		backend = new BackEnd(username, password, hostname, port);
+		try {
+			backend = new BackEnd(username, password, hostname, port);
+		} catch (UnknownHostException e) {
+			JOptionPane.showMessageDialog(frame, "Could not reach server "+hostname+":"+Integer.toString(port), "Connection Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(frame, "IO Error", "Connection Error", JOptionPane.ERROR_MESSAGE);
+			return;
+		} 
 		
 		userField.setText("");
 		passField.setText("");

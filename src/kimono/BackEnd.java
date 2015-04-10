@@ -18,24 +18,15 @@ public class BackEnd {
 	private Scanner in;
 	private PrintWriter out;
 	
-	public BackEnd(String username, String password, String hostname, int port) {
+	public BackEnd(String username, String password, String hostname, int port)  throws UnknownHostException, IOException{
 		this.username = username;
 		this.password = password;
 		this.chatroomname = "";
-		try {
-			socket = new Socket(hostname, port);
-			in = new Scanner(socket.getInputStream());
-			out = new PrintWriter(socket.getOutputStream());
-			
-			out.println("LOGIN:"+username+":"+password);
-			
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		socket = new Socket(hostname, port);
+		in = new Scanner(socket.getInputStream());
+		out = new PrintWriter(socket.getOutputStream());
+		
+		out.println("LOGIN:"+username+":"+password);
 	}
 	
 	//Send message to current chatroom

@@ -3,6 +3,7 @@ package kimono;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 
 public class CommandLineInterface {
@@ -44,7 +45,17 @@ public class CommandLineInterface {
 			//Start headless server
 			runClient(true);
 		} else {
-			backend = new BackEnd(u, p, host, port);
+			
+			try {
+				backend = new BackEnd(u, p, host, port);
+			} catch (UnknownHostException e) {
+				System.out.println("Could not reach server "+host+":"+Integer.toString(port));
+				System.exit(1);
+			} catch (IOException e) {
+				System.out.println("Could not connect: IO Error");
+				System.exit(1);
+			} 
+			
 			runClient(false);
 		}
 		
