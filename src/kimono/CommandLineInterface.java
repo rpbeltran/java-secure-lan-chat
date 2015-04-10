@@ -6,15 +6,19 @@ import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 
+import kimono.server.KimonoServer;
+
 public class CommandLineInterface {
 
 	BufferedReader br;
 	BackEnd backend;
+	KimonoServer server;
 	private static HashMap<String, String> commands;
 	
-	public CommandLineInterface(boolean server,String u, String p, String host, int port) {
+	public CommandLineInterface(boolean isserver,String u, String p, String host, int port) {
 		System.out.println();
 		br = new BufferedReader(new InputStreamReader(System.in));
+		if (!u.equals("")) System.out.println("User: "+u);
 		while (u.equals("")) {
 			System.out.print("Username: ");
 			u = input();
@@ -26,8 +30,13 @@ public class CommandLineInterface {
 		
 		setUpCommands();
 		
-		if (server) {
-			//Start headless server
+		if (isserver) {
+			try {
+				server = new KimonoServer(port);
+			} catch (IOException e) {
+				System.out.println("Could not initialize server: IO Error. Check ports?");
+				System.exit(1);
+			}
 			runClient(true);
 		} else {
 			

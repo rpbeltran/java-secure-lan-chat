@@ -101,7 +101,8 @@ public class FrontEnd {
 	}
 	
 	public void sendMessage() {
-		
+		backend.sendMessage(chatField.getText());
+		chatField.setText("");
 	}
 	
 	public void login() {

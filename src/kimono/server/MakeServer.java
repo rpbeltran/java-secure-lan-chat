@@ -3,6 +3,7 @@ package kimono.server;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -86,8 +87,12 @@ public class MakeServer {
 		JOptionPane.showMessageDialog(frame, text, "Error!", JOptionPane.ERROR_MESSAGE);
 	}
 	
-	public void makeServer(int port) {
-		server = new KimonoServer(port, this);
+	public void makeServer(int port){
+		try {
+			server = new KimonoServer(port);
+		} catch (IOException e) {
+			displayError("IOException thrown. Please check console.\nTry closing any other programs using the port "+port+".\nException specified: "+e.toString());
+		}
 	}
 	
 }
