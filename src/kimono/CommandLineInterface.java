@@ -21,23 +21,8 @@ public class CommandLineInterface {
 		}
 		while (p.equals("")) {
 			System.out.print("Password: ");
-			p = input();
+			p = new String(System.console().readPassword());
 		}
-		/*		// Handle Defaults in Main
-		if (host.equals("")) {
-			System.out.print("Hostname: ");
-			host = input();
-			if (host.equals("")) host = "127.0.0.1";
-		}
-		if (port == 0) {
-			System.out.print("Hostname: ");
-			String porti = input();
-			if (porti.equals("")) {
-				port = 32800;
-			} else {
-				port = Integer.parseInt(porti);
-			}
-		}*/
 		
 		setUpCommands();
 		
