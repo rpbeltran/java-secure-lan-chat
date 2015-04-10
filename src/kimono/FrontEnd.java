@@ -355,9 +355,11 @@ public class FrontEnd {
 		
 		Box hostBox = Box.createHorizontalBox();
 		ipField = new JFormattedTextField(createFormatter("###.###.###.###"));
+		ipField.setText("127.000.000.001");
 		
 		JLabel portLabel = new JLabel("Port:");
-		portField = new JFormattedTextField(createFormatter("######"));
+		portField = new JFormattedTextField(createFormatter("#####"));
+		portField.setText("32800");
 		
 		hostBox.add(ipField);
 		hostBox.add(Box.createHorizontalStrut(50));
