@@ -36,7 +36,7 @@ public class FrontEnd {
 	JButton loginButton;
 	JButton serverButton;
 	JTextField userField = new JTextField();
-	JFormattedTextField ipField;
+	JTextField ipField;
 	JFormattedTextField portField;
 	JPasswordField passField = new JPasswordField();
 	NumberFormat ipFormat;
@@ -101,6 +101,26 @@ public class FrontEnd {
 		
 	}
 	
+	public void login() {
+		String username = userField.getText();
+		String password = new String(passField.getPassword());
+		String hostname = ipField.getText();
+		int port = Integer.parseInt(portField.getText());
+		
+		backend = new BackEnd(username, password, hostname, port);
+		
+		userField.setText("");
+		passField.setText("");
+		
+		
+		
+		frame.remove(loginBox);
+		//frame.add(initBox);
+		frame.add(chatBox);
+		frame.setResizable(true);
+		frame.pack();
+	}
+	
 	public void setupActionListeners(){
 		ActionListener al = new ActionListener() {
 			@Override
@@ -109,23 +129,7 @@ public class FrontEnd {
 				JButton source = (JButton) ae.getSource();
 				
 				if (source == loginButton){
-					String username = userField.getText();
-					String password = new String(passField.getPassword());
-					String hostname = ipField.getText();
-					int port = Integer.parseInt(portField.getText());
-					
-					backend = new BackEnd(username, password, hostname, port);
-					
-					userField.setText("");
-					passField.setText("");
-					
-					
-					
-					frame.remove(loginBox);
-					//frame.add(initBox);
-					frame.add(chatBox);
-					frame.setResizable(true);
-					frame.pack();
+					login();
 				}
 				if (source == logOut) {
 					
@@ -190,6 +194,18 @@ public class FrontEnd {
 		serverButton.addActionListener(al);
 		logOut.addActionListener(al);
 		chatSubmit.addActionListener(al);
+		
+		ActionListener loginal = new ActionListener(){
+			public void actionPerformed(ActionEvent arg0) {
+				login();
+			}
+			
+		};
+		userField.addActionListener(loginal);
+		passField.addActionListener(loginal);
+		ipField.addActionListener(loginal);
+		portField.addActionListener(loginal);
+		
 		
 		ActionListener alt = new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
@@ -354,8 +370,8 @@ public class FrontEnd {
 		ipBox.add(Box.createHorizontalGlue());
 		
 		Box hostBox = Box.createHorizontalBox();
-		ipField = new JFormattedTextField(createFormatter("###.###.###.###"));
-		ipField.setText("127.000.000.001");
+		ipField = new JTextField();
+		ipField.setText("127.0.0.1");
 		
 		JLabel portLabel = new JLabel("Port:");
 		portField = new JFormattedTextField(createFormatter("#####"));
