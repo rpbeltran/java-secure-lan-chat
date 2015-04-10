@@ -5,13 +5,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-public class CommandLine {
+public class CommandLineInterface {
 
 	BufferedReader br;
 	BackEnd backend;
 	private static HashMap<String, String> commands;
 	
-	public CommandLine(boolean server,String u, String p, String host, int port) {
+	public CommandLineInterface(boolean server,String u, String p, String host, int port) {
 		System.out.println();
 		br = new BufferedReader(new InputStreamReader(System.in));
 		while (u.equals("")) {
