@@ -3,6 +3,7 @@ package kimono.room;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -42,7 +43,8 @@ public class RoomFile {
 	public List<String> readContent(){
 		try {
 			
-			 return Files.readAllLines(Paths.get(filepath));
+			 return Files.readAllLines(Paths.get(filepath),Charset.defaultCharset());
+			 
 			
 		} catch (Exception e) {
 			e.printStackTrace();
