@@ -1,10 +1,14 @@
 package kimono;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.Box;
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -15,10 +19,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 
 import kimono.server.MakeServer;
 
 public class FrontEnd {
+	
+	public static final int STARTWIDTH = 600;
+	public static final int STARTHEIGHT = 400;
+	public static final int SIDEWIDTH = 200;
 
 	public FrontEnd() {
 		
@@ -152,6 +161,8 @@ public class FrontEnd {
 		
 		// Chat init screen
 		
+		
+		
 		final Box chatBox = Box.createVerticalBox();
 		Box chatSideBox = Box.createVerticalBox();
 		
@@ -159,34 +170,58 @@ public class FrontEnd {
 		chooseChatBox.setEditable(true);
 		final JButton joinChatButton = new JButton("Join / Create Chat Room");
 		chooseChatBox.setMaximumSize(new Dimension(2147483647,48));
-		JList<String> userList = new JList<String>();
+		chooseChatBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		chooseChatBox.setAlignmentY(Component.TOP_ALIGNMENT);
+		joinChatButton.setMinimumSize(new Dimension(SIDEWIDTH, 48));
+		joinChatButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+		joinChatButton.setAlignmentY(Component.TOP_ALIGNMENT);
 		
+		ListModel<String> usernames = new DefaultListModel<String>();
+		
+		JList<String> userList = new JList<String>(usernames);
+		userList.setAlignmentX(Component.LEFT_ALIGNMENT);
+		userList.setAlignmentY(Component.TOP_ALIGNMENT);
+		userList.setMinimumSize(new Dimension(SIDEWIDTH, 0));
 		
 		chatSideBox.add(chooseChatBox);
 		chatSideBox.add(joinChatButton);
 		chatSideBox.add(userList);
+		chatSideBox.setMinimumSize(new Dimension(SIDEWIDTH, 48));
+		chatSideBox.setMaximumSize(new Dimension(SIDEWIDTH, 2147483647));
+		chatSideBox.setAlignmentY(Component.TOP_ALIGNMENT);
 		
-		JScrollPane chatMessPane = new JScrollPane();
+		Box chatMessPane = Box.createVerticalBox();
 		JTextArea chatMessArea = new JTextArea();
 		chatMessArea.setEditable(false);
-		
+		chatMessArea.setAlignmentX(Component.LEFT_ALIGNMENT);
 		chatMessPane.add(chatMessArea);
+		chatMessPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		JSplitPane chatTop = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, chatMessPane, chatSideBox);
-		chatTop.setOneTouchExpandable(true);
-		chatTop.setDividerLocation(150);
+		Box chatTop = Box.createHorizontalBox();
+		chatTop.add(chatMessPane);
+		chatTop.add(chatSideBox);
+		chatTop.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 		final JButton chatBackButton = new JButton("Back");
 		JTextField chatField = new JTextField();
 		chatField.setMaximumSize(new Dimension(2147483647,48));
+		chatField.setMinimumSize(new Dimension(10,48));
 		final JButton chatSubmit = new JButton(">");
+		chatSubmit.setMinimumSize(new Dimension(48,48));
 		Box chatInitLoadBox = Box.createHorizontalBox();
 		chatInitLoadBox.add(chatField);
 		chatInitLoadBox.add(chatSubmit);
 		chatInitLoadBox.add(chatBackButton);
+		chatInitLoadBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
 		
 		chatBox.add(chatTop);
 		chatBox.add(chatInitLoadBox);
+		chatBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
+		chatBox.setMinimumSize(new Dimension(300,200));
+		frame.setMinimumSize(new Dimension(300,200));
+		chatBox.setPreferredSize(new Dimension(STARTWIDTH,STARTHEIGHT));
 		
 		// Set up action listener for the buttons
 		
