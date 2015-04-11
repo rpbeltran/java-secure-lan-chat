@@ -1,10 +1,12 @@
 package kimono;
 
 import java.io.BufferedReader;
+import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.Scanner;
 
 import kimono.server.KimonoServer;
 
@@ -25,7 +27,12 @@ public class CommandLineInterface {
 		}
 		while (p.equals("")) {
 			System.out.print("Password: ");
-			p = new String(System.console().readPassword());
+			Console c = System.console();
+			if (c != null) { // If this is a valid console, it will not print the password.
+				p = new String(System.console().readPassword());
+			} else { // On the other hand, Eclipse doesn't give us one. This is not the preferred method.
+				p = new Scanner(System.in).nextLine();
+			}
 		}
 		
 		setUpCommands();
