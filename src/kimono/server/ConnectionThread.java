@@ -7,11 +7,12 @@ import java.net.Socket;
 
 public class ConnectionThread extends Thread {
 
-	KimonoServer server;
+	private KimonoServer server;
 	boolean persist = true;
 	
 	public ConnectionThread(KimonoServer server) {
 		this.server = server;
+		this.setName("ConnectionThread");
 	}
 	
 	@Override
@@ -27,7 +28,7 @@ public class ConnectionThread extends Thread {
 				e.printStackTrace();
 			}
 			System.out.println(s);
-			InputThread inputThread = new InputThread(s, server);
+			ClientThread inputThread = new ClientThread(s, server);
 			server.getInputThreads().add(inputThread);
 			inputThread.start();
 		}
