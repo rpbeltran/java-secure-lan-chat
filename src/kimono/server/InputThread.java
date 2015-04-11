@@ -31,7 +31,7 @@ public class InputThread extends Thread {
 	@Override
 	public void run() {
 		while(persist) {
-			if (in.hasNextLine()) {
+			if (in.hasNext()) {
 				System.out.println(in.nextLine());
 			}
 		}

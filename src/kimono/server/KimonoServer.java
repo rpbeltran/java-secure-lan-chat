@@ -13,11 +13,12 @@ public class KimonoServer {
 	Set<InputThread> inputThreads;
 	
 	public KimonoServer(int port) throws IOException {
-		
+		System.out.println("creating serversocket with port "+port);
 		serverSocket = new ServerSocket(port);
 		
 		inputThreads = new HashSet<InputThread>();
 		connectionThread = new ConnectionThread(this);
+		connectionThread.start();
 	}
 	
 	public synchronized Set<InputThread> getInputThreads() {

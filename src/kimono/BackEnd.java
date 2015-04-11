@@ -27,6 +27,7 @@ public class BackEnd {
 		out = new PrintWriter(socket.getOutputStream());
 		
 		out.println("LOGIN:"+username+":"+password);
+		out.flush();
 	}
 	
 	//Send message to current chatroom

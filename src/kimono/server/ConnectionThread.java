@@ -19,12 +19,14 @@ public class ConnectionThread extends Thread {
 		while(persist) {
 			ServerSocket ss = server.getServerSocket();
 			Socket s = null;
+			System.out.println("Waiting for client...");
 			try {
 				s = ss.accept();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			System.out.println(s);
 			InputThread inputThread = new InputThread(s, server);
 			server.getInputThreads().add(inputThread);
 			inputThread.start();
