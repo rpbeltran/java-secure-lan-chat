@@ -66,7 +66,7 @@ public class CommandLineInterface {
 		System.out.println("Welcome to Closed Kimono");
 		System.out.println();
 		help();
-		System.out.println("Avaliable rooms: ");
+		System.out.println("Available rooms: ");
 		//Display available rooms
 		//Somehow make CLI here
 	}

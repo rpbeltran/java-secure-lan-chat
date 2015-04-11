@@ -1,11 +1,12 @@
 package kimono.server;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public class ConnectionThread extends Thread {
+public class ConnectionThread extends Thread implements Closeable {
 
 	private KimonoServer server;
 	boolean persist = true;
@@ -27,11 +28,17 @@ public class ConnectionThread extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			if (s == null) continue;
 			System.out.println(s);
 			ClientThread inputThread = new ClientThread(s, server);
-			server.getInputThreads().add(inputThread);
+			server.getClientThreads().add(inputThread);
 			inputThread.start();
 		}
+	}
+
+	@Override
+	public void close() {
+		persist = false;
 	}
 	
 }

@@ -1,11 +1,12 @@
 package kimono.server;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class ClientThread extends Thread {
+public class ClientThread extends Thread implements Closeable {
 	
 	private KimonoServer server;
 	private Socket socket;
@@ -41,14 +42,28 @@ public class ClientThread extends Thread {
 		}
 	}
 	
-	public void disconnect() {
+	@Override
+	public void close() {
 		persist = false;
+		server.getClientThreads().remove(this);
 		try {
 			socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public void evaluateInput(String input) {
+		
+		if (input.startsWith("DISCONNECT")) {
+			close();
+		} else if (input.startsWith("LOGIN")) { // Input should be in the form of 
+			String[] params = input.split(":"); // 
+			String username = params[1];
+			String password = params[2];
+		}
+		
 	}
 	
 }

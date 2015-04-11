@@ -50,6 +50,7 @@ public class MakeServer {
 				
 				if(source == menuLogout){
 					frame.dispose();
+					server.close();
 					System.exit(0);
 				}
 				
