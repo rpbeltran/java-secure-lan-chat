@@ -45,6 +45,11 @@ public class FrontEnd {
 	NumberFormat ipFormat;
 	NumberFormat portFormat;
 	
+	String defusername;
+	String defpassword;
+	String defhostname;
+	int defportnum;
+	
 	Box chatBox;
 	JButton chatBackButton;
 	JTextField chatField;
@@ -65,7 +70,12 @@ public class FrontEnd {
 	
 	BackEnd backend;
 	
-	public FrontEnd() {
+	public FrontEnd(String u, String p, String host, int port) {
+		
+		defusername = u;
+		defpassword = p;
+		defhostname = host;
+		defportnum = port;
 		
 		//Make a blank JFrame
 		frame = new JFrame("Closed Kimono ver. "+Kimono.VERSION);
@@ -95,9 +105,6 @@ public class FrontEnd {
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
-		
-		
-		
 	}
 	
 	public void sendMessage() {
@@ -117,12 +124,12 @@ public class FrontEnd {
 			JOptionPane.showMessageDialog(frame, "Could not reach server "+hostname+":"+Integer.toString(port), "Connection Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		} catch (IOException e) {
-			JOptionPane.showMessageDialog(frame, "IO Error", "Connection Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(frame, "IO Error: "+e.getMessage(), "Connection Error", JOptionPane.ERROR_MESSAGE);
 			return;
 		} 
 		
-		userField.setText("");
-		passField.setText("");
+		userField.setText(defusername);
+		passField.setText(defpassword);
 		
 		
 		
@@ -185,8 +192,8 @@ public class FrontEnd {
 					String username = userField.getText();
 					String password = new String(passField.getPassword());
 					
-					userField.setText("");
-					passField.setText("");
+					userField.setText(defusername);
+					passField.setText(defpassword);
 					MakeServer myServer = new MakeServer(username, password);
 					myServer.makeServer(32800);
 				}
@@ -367,12 +374,14 @@ public class FrontEnd {
 		userBox.add(userLabel);
 		userBox.add(Box.createHorizontalGlue());
 		userField = new JTextField();
+		userField.setText(defusername);
 		
 		Box passBox = Box.createHorizontalBox();
 		JLabel passLabel = new JLabel("Password:");
 		passBox.add(passLabel);
 		passBox.add(Box.createHorizontalGlue());
 		passField = new JPasswordField();
+		passField.setText(defpassword);
 		userField.setPreferredSize(new Dimension(80,20));
 		passField.setPreferredSize(new Dimension(80,20));
 		
@@ -383,11 +392,11 @@ public class FrontEnd {
 		
 		Box hostBox = Box.createHorizontalBox();
 		ipField = new JTextField();
-		ipField.setText("127.0.0.1");
+		ipField.setText(defhostname);
 		
 		JLabel portLabel = new JLabel("Port:");
 		portField = new JFormattedTextField(createFormatter("#####"));
-		portField.setText("32800");
+		portField.setText(Integer.toString(defportnum));
 		
 		hostBox.add(ipField);
 		hostBox.add(Box.createHorizontalStrut(50));

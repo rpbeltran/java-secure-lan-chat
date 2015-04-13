@@ -18,21 +18,21 @@ public class ConnectionThread extends Thread implements Closeable {
 	
 	@Override
 	public void run() {
+		System.out.println("Waiting for client...");
 		while(persist) {
 			ServerSocket ss = server.getServerSocket();
 			Socket s = null;
-			System.out.println("Waiting for client...");
 			try {
 				s = ss.accept();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//Do nothing. It was clogging the console.
 			}
 			if (s == null) continue;
 			System.out.println(s);
 			ClientThread inputThread = new ClientThread(s, server);
 			server.getClientThreads().add(inputThread);
 			inputThread.start();
+			System.out.println("Waiting for client...");
 		}
 	}
 

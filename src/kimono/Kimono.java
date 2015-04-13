@@ -75,13 +75,24 @@ public class Kimono {
 			help();
 		}
 		
+		final boolean fserver = server;
+		final String fu = u;
+		final String fp = p;
+		final String fhost = host;
+		final int fport = port;
+		
 		if(headless) {
-			CommandLineInterface cli = new CommandLineInterface(server, u, p, host, port);
+			SwingUtilities.invokeLater(new Runnable() {
+				@Override
+				public void run() {
+					new CommandLineInterface(fserver, fu, fp, fhost, fport);
+				}
+			});
 		} else {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					new FrontEnd();
+					new FrontEnd(fu,fp,fhost,fport);
 				}
 			});
 		}

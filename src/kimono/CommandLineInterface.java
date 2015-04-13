@@ -41,7 +41,7 @@ public class CommandLineInterface {
 			try {
 				server = new KimonoServer(port);
 			} catch (IOException e) {
-				System.out.println("Could not initialize server: IO Error. Check ports?");
+				System.out.println("Could not initialize server: IO Error. Check ports? Error: "+e.getMessage());
 				System.exit(1);
 			}
 			runClient(true);
@@ -50,10 +50,10 @@ public class CommandLineInterface {
 			try {
 				backend = new BackEnd(u, p, host, port);
 			} catch (UnknownHostException e) {
-				System.out.println("Could not reach server "+host+":"+Integer.toString(port));
+				System.out.println("Could not reach server "+host+":"+Integer.toString(port)+" - "+e.getMessage());
 				System.exit(1);
 			} catch (IOException e) {
-				System.out.println("Could not connect: IO Error");
+				System.out.println("Could not connect: IO Error - "+e.getMessage());
 				System.exit(1);
 			} 
 			
@@ -76,7 +76,7 @@ public class CommandLineInterface {
 		{
 		case "help":
 			help();
-			return true;
+																	return true;
 		default:
 			return false;
 		}
