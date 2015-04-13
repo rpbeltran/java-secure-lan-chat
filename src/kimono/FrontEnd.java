@@ -1,6 +1,5 @@
 package kimono;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -8,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
