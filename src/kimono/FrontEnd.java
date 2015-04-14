@@ -49,6 +49,8 @@ public class FrontEnd {
 	int defportnum;
 	
 	Box chatBox;
+	JComboBox<String> chooseChatBox;
+	JButton joinChatButton;
 	JButton chatBackButton;
 	JTextField chatField;
 	JButton chatSubmit;
@@ -108,6 +110,10 @@ public class FrontEnd {
 	public void sendMessage() {
 		backend.sendMessage(chatField.getText());
 		chatField.setText("");
+	}
+	
+	public void joinRoom() {
+		backend.joinRoom(chooseChatBox.getSelectedItem().toString());
 	}
 	
 	public void login() {
@@ -198,6 +204,9 @@ public class FrontEnd {
 				else if (source == chatSubmit) {
 					sendMessage();
 				}
+				else if (source == joinChatButton) {
+					joinRoom();
+				}
 			}
 		};
 		loginButton.addActionListener(al);
@@ -205,6 +214,7 @@ public class FrontEnd {
 		saveBackButton.addActionListener(al);
 		loadBackButton.addActionListener(al);
 		chatBackButton.addActionListener(al);
+		joinChatButton.addActionListener(al);
 		save.addActionListener(al);
 		load.addActionListener(al);
 		chat.addActionListener(al);
@@ -294,9 +304,9 @@ public class FrontEnd {
 	{
 		Box cb = Box.createVerticalBox();
 		Box chatSideBox = Box.createVerticalBox();
-		JComboBox<String> chooseChatBox = new JComboBox<String>();
+		chooseChatBox = new JComboBox<String>();
 		chooseChatBox.setEditable(true);
-		final JButton joinChatButton = new JButton("Join / Create Chat Room");
+		joinChatButton = new JButton("Join / Create Chat Room");
 		chooseChatBox.setMaximumSize(new Dimension(2147483647,48));
 		chooseChatBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 		chooseChatBox.setAlignmentY(Component.TOP_ALIGNMENT);
