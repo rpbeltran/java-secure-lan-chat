@@ -21,7 +21,10 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
+import javax.swing.UIManager;
 import javax.swing.text.MaskFormatter;
+
+import com.jgoodies.looks.windows.WindowsLookAndFeel;
 
 import kimono.server.MakeServer;
 
@@ -71,6 +74,11 @@ public class FrontEnd {
 	BackEnd backend;
 	
 	public FrontEnd(String u, String p, String host, int port) {
+		
+		   try {
+			      UIManager.setLookAndFeel(new WindowsLookAndFeel());
+			   } catch (Exception e) {}
+			
 		
 		defusername = u;
 		defpassword = p;
