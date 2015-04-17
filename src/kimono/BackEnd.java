@@ -34,7 +34,7 @@ public class BackEnd {
 	public void sendMessage(String message){
 		if (chatroomname == "") return; //Not in chat room
 		
-		out.println("MESS:"+chatroomname+":"+message);
+		out.println("MESS:"+chatroomname+":"+username+":"+message);
 		out.flush();
 		
 	}

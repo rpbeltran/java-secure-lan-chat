@@ -23,6 +23,8 @@ public class KimonoServer implements Closeable {
 		connectionThread.start();
 	}
 	
+	
+	
 	public synchronized Set<ClientThread> getClientThreads() {
 		return inputThreads;
 	}

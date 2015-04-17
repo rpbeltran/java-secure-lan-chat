@@ -130,16 +130,28 @@ public class FrontEnd {
 		frame.setVisible(true);
 	}
 	
-	public void sendMessage() {
+	private void sendMessage() {
 		backend.sendMessage(chatField.getText());
 		chatField.setText("");
 	}
 	
-	public void joinRoom() {
+	private void joinRoom() {
 		backend.joinRoom(chooseChatBox.getSelectedItem().toString());
 	}
 	
-	public void login() {
+	public void postMessage() {
+		
+	}
+	
+	public void updateUser() {
+		
+	}
+	
+	public void updateRooms() {
+		
+	}
+	
+	private void login() {
 		String username = userField.getText();
 		String password = new String(passField.getPassword());
 		String hostname = ipField.getText();
@@ -164,7 +176,7 @@ public class FrontEnd {
 		frame.pack();
 	}
 	
-	public void setupActionListeners(){
+	private void setupActionListeners(){
 		ActionListener al = new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ae) {
@@ -260,7 +272,7 @@ public class FrontEnd {
 		chatField.addActionListener(alt);
 	}
 	
-	public Box makeMenuBox(){
+	private Box makeMenuBox(){
 		Box ib = Box.createVerticalBox();
 		save = new JButton("Save a message");
 		load = new JButton("Load a message");
@@ -285,7 +297,7 @@ public class FrontEnd {
 		return ib;
 	}
 	
-	public Box makeSaveBox(){
+	private Box makeSaveBox(){
 		Box sb = Box.createVerticalBox();
 		
 		Box messBox = Box.createHorizontalBox();
@@ -311,7 +323,7 @@ public class FrontEnd {
 		return sb;
 	}
 	
-	public Box makeChatBox()
+	private Box makeChatBox()
 	{
 		Box cb = Box.createVerticalBox();
 		Box chatSideBox = Box.createVerticalBox();
@@ -332,6 +344,8 @@ public class FrontEnd {
 		JList<String> userList = new JList<String>(usernames);
 		userList.setAlignmentX(Component.LEFT_ALIGNMENT);
 		userList.setAlignmentY(Component.TOP_ALIGNMENT);
+		userList.setMaximumSize(new Dimension(SIDEWIDTH, 2147483647));
+		userList.setMinimumSize(new Dimension(SIDEWIDTH, 48));
 		userList.setVisibleRowCount(15);
 		userList.setBackground(Color.white);
 		userList.setVisible(true);
@@ -384,7 +398,7 @@ public class FrontEnd {
 		return cb;
 	}
 	
-	public Box makeLoginBox()
+	private Box makeLoginBox()
 
 	{
 		Box loginBox = Box.createVerticalBox();
@@ -479,7 +493,7 @@ public class FrontEnd {
 	    return formatter;
 	}
 
-	public Box getLoadBox()
+	private Box getLoadBox()
 {
 		Box lb = Box.createVerticalBox();
 		
