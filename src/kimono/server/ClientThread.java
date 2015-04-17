@@ -56,7 +56,7 @@ public class ClientThread extends Thread implements Closeable {
 	
 	public void evaluateInput(String input) {
 		
-		if (input.startsWith("DISCONNECT")) {
+		if (input.startsWith("QUIT")) {
 			close();
 		} else if (input.startsWith("LOGIN")) { // Input should be in the form of 
 			String[] params = input.split(":"); // 

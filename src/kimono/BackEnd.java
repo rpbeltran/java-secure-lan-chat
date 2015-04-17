@@ -61,4 +61,20 @@ public class BackEnd {
 				
 	}
 	
+	public void handleInput(String input) {
+		
+		String[] split = input.split(":");
+		
+		switch(split[0]) {
+			case "MESS":
+				
+				break;
+			case "STOP":
+				break;
+			case "ROOM":
+				break;
+		}
+		
+	}
+	
 }
