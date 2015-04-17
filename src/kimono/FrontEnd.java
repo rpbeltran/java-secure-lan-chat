@@ -1,5 +1,6 @@
 package kimono;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -7,6 +8,9 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.NumberFormat;
+
+
+
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -20,6 +24,7 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -153,10 +158,7 @@ public class FrontEnd {
 		userField.setText(defusername);
 		passField.setText(defpassword);
 		
-		
-		
 		frame.remove(loginBox);
-		//frame.add(initBox);
 		frame.add(chatBox);
 		frame.setResizable(true);
 		frame.pack();
@@ -172,16 +174,12 @@ public class FrontEnd {
 				if (source == loginButton){
 					login();
 				}
-				if (source == logOut) {
+				else if (source == logOut) {
 					
 					//tell BackEnd to log the user out.
 					frame.remove(initBox);
 					frame.add(loginBox);
 					frame.pack();
-				}
-				else if (source == saveButton) {
-					
-					//execute save code here
 				}
 				else if (source == chat) {
 					frame.remove(initBox);
@@ -193,7 +191,6 @@ public class FrontEnd {
 					frame.remove(saveBox);
 					frame.remove(loadBox);
 					frame.remove(chatBox);
-					//frame.add(initBox);
 					frame.add(loginBox);
 					frame.setResizable(false);
 					frame.pack();
@@ -243,14 +240,13 @@ public class FrontEnd {
 		ActionListener loginal = new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
 				login();
-			}
-			
+			}	
 		};
+		
 		userField.addActionListener(loginal);
 		passField.addActionListener(loginal);
 		ipField.addActionListener(loginal);
 		portField.addActionListener(loginal);
-		
 		
 		ActionListener alt = new ActionListener(){
 			public void actionPerformed(ActionEvent arg0) {
@@ -258,9 +254,9 @@ public class FrontEnd {
 				if (source == chatField) {
 					sendMessage();
 				}
-			}
-			
+			}	
 		};
+		
 		chatField.addActionListener(alt);
 	}
 	
@@ -292,9 +288,6 @@ public class FrontEnd {
 	public Box makeSaveBox(){
 		Box sb = Box.createVerticalBox();
 		
-		//userField.setMaximumSize(new Dimension(80,20));
-		//passField.setMaximumSize(new Dimension(80,20));
-		
 		Box messBox = Box.createHorizontalBox();
 		JLabel messLabel = new JLabel("Message:");
 		messBox.add(messLabel);
@@ -325,12 +318,13 @@ public class FrontEnd {
 		chooseChatBox = new JComboBox<String>();
 		chooseChatBox.setEditable(true);
 		joinChatButton = new JButton("Join / Create Chat Room");
-		chooseChatBox.setMaximumSize(new Dimension(2147483647,48));
+		chooseChatBox.setMaximumSize(new Dimension(SIDEWIDTH,48));
 		chooseChatBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 		chooseChatBox.setAlignmentY(Component.TOP_ALIGNMENT);
 		
 		joinChatButton.setFocusable(false);
 		joinChatButton.setMinimumSize(new Dimension(SIDEWIDTH, 48));
+		joinChatButton.setMaximumSize(new Dimension(SIDEWIDTH, 48));
 		joinChatButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 		joinChatButton.setAlignmentY(Component.TOP_ALIGNMENT);
 		
@@ -338,21 +332,31 @@ public class FrontEnd {
 		JList<String> userList = new JList<String>(usernames);
 		userList.setAlignmentX(Component.LEFT_ALIGNMENT);
 		userList.setAlignmentY(Component.TOP_ALIGNMENT);
-		userList.setMinimumSize(new Dimension(SIDEWIDTH, 0));
+		userList.setVisibleRowCount(15);
+		userList.setBackground(Color.white);
+		userList.setVisible(true);
+		JScrollPane listScroller = new JScrollPane(userList);
 		
 		chatSideBox.add(chooseChatBox);
 		chatSideBox.add(joinChatButton);
-		chatSideBox.add(userList);
+		chatSideBox.add(listScroller);
 		chatSideBox.setMinimumSize(new Dimension(SIDEWIDTH, 48));
 		chatSideBox.setMaximumSize(new Dimension(SIDEWIDTH, 2147483647));
 		chatSideBox.setAlignmentY(Component.TOP_ALIGNMENT);
+		
+		
 		Box chatMessPane = Box.createVerticalBox();
 		JTextArea chatMessArea = new JTextArea();
 		chatMessArea.setEditable(false);
+		chatMessArea.setBackground(Color.white);
+		chatMessArea.setVisible(true);
 		chatMessArea.setAlignmentX(Component.LEFT_ALIGNMENT);
+		chatMessArea.setText("");
+		chatMessArea.setBorder(BorderFactory.createEtchedBorder());
 		chatMessPane.add(chatMessArea);
 		chatMessPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		chatMessPane.setAlignmentY(Component.TOP_ALIGNMENT);
+		
 		Box chatTop = Box.createHorizontalBox();
 		chatTop.add(chatMessPane);
 		chatTop.add(chatSideBox);

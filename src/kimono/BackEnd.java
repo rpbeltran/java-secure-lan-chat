@@ -41,9 +41,10 @@ public class BackEnd {
 	
 	//Join or instantiate a chat room
 	public void joinRoom(String roomname){
-		if (roomname == "") return;
+		if (roomname == "") 
+			return;
 		chatroomname = roomname;
-		//connect to server here
+		//TODO: If(room exists){connect to server here} else {make a new room with roomname}
 	}
 	
 	//Return a list of all recent messages
