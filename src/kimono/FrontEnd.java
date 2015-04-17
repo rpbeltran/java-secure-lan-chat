@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.NumberFormat;
 
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
@@ -17,11 +18,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
 import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
 
 import com.jgoodies.looks.windows.WindowsLookAndFeel;
@@ -89,6 +93,12 @@ public class FrontEnd {
 		frame = new JFrame("Closed Kimono ver. "+Kimono.VERSION);
 		frame.setResizable(false);
 		
+		//Add padding
+		JPanel contentPanel = new JPanel();
+		Border padding = BorderFactory.createEmptyBorder(10,10,10,10);
+		contentPanel.setBorder(padding);
+
+		frame.setContentPane(contentPanel);
 		//Menu screen
 		initBox = makeMenuBox();
 		
@@ -319,6 +329,7 @@ public class FrontEnd {
 		chooseChatBox.setAlignmentX(Component.LEFT_ALIGNMENT);
 		chooseChatBox.setAlignmentY(Component.TOP_ALIGNMENT);
 		
+		joinChatButton.setFocusable(false);
 		joinChatButton.setMinimumSize(new Dimension(SIDEWIDTH, 48));
 		joinChatButton.setAlignmentX(Component.LEFT_ALIGNMENT);
 		joinChatButton.setAlignmentY(Component.TOP_ALIGNMENT);
@@ -348,10 +359,12 @@ public class FrontEnd {
 		chatTop.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 		chatBackButton = new JButton("Back");
+		chatBackButton.setFocusable(false);
 		chatField = new JTextField();
 		chatField.setMaximumSize(new Dimension(2147483647,48));
 		chatField.setMinimumSize(new Dimension(10,48));
 		chatSubmit = new JButton(">");
+		chatSubmit.setFocusable(false);
 		chatSubmit.setMinimumSize(new Dimension(48,48));
 		Box chatInitLoadBox = Box.createHorizontalBox();
 		chatInitLoadBox.add(chatField);
@@ -386,6 +399,7 @@ public class FrontEnd {
 		loginLabelBox2.add(Box.createHorizontalGlue());
 		
 		Box userBox = Box.createHorizontalBox();
+		userBox.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
 		JLabel userLabel = new JLabel("Username:");
 		userBox.add(userLabel);
 		userBox.add(Box.createHorizontalGlue());
@@ -422,21 +436,31 @@ public class FrontEnd {
 		
 		
 		Box loginSubmitBox = Box.createHorizontalBox();
+		loginSubmitBox.setBorder(BorderFactory.createEmptyBorder(10,0,0,0));
 		loginButton = new JButton("Log in");
 		serverButton = new JButton("Start Kimono Chat server");
+		
+		loginButton.setFocusable(false);
+		serverButton.setFocusable(false);
+		
 		loginSubmitBox.add(loginButton);
 		loginSubmitBox.add(serverButton);
 		loginSubmitBox.add(Box.createHorizontalGlue());
+		
+		
 		loginBox.add(loginLabelBox);
 		loginBox.add(loginLabelBox1);
 		loginBox.add(loginLabelBox2);
 		loginBox.add(userBox);
 		loginBox.add(userField);
+		loginBox.add(new JSeparator(JSeparator.HORIZONTAL));
 		loginBox.add(passBox);
 		loginBox.add(passField);
+		loginBox.add(new JSeparator(JSeparator.HORIZONTAL));
 		loginBox.add(ipBox);
 		loginBox.add(hostBox);
 		loginBox.add(loginSubmitBox);
+		
 		return loginBox;
 	}
 	

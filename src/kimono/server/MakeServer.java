@@ -62,10 +62,16 @@ public class MakeServer {
 	
 	public Box makeMenuBox(){
 		Box mb = Box.createVerticalBox();
+		
 		menuButton1 = new JButton("Modify Settings");
 		menuButton2 = new JButton("Manage Users");
 		menuButton3 = new JButton("Export Messages");
 		menuLogout = new JButton("End Server");
+		
+		menuButton1.setFocusable(false);
+		menuButton2.setFocusable(false);
+		menuButton3.setFocusable(false);
+		menuLogout.setFocusable(false);
 		
 		menuButton1.setPreferredSize(new Dimension(320,90));
 		menuButton2.setPreferredSize(new Dimension(320,90));
