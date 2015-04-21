@@ -17,6 +17,8 @@ public class BackEnd {
 	private Socket socket;
 	private Scanner in;
 	private PrintWriter out;
+	private FrontEnd frontEnd;
+	private List<List<String>> messages;
 	
 	public BackEnd(String username, String password, String hostname, int port)  throws UnknownHostException, IOException{
 		this.username = username;
@@ -28,6 +30,15 @@ public class BackEnd {
 		
 		out.println("LOGIN:"+username+":"+password);
 		out.flush();
+	}
+	
+	public void setFrontEnd(FrontEnd fe) {
+		frontEnd = fe;
+	}
+	
+	//returns the list of local messages
+	public List<List<String>> getMessages() {
+		return messages;
 	}
 	
 	//Send message to current chatroom
@@ -43,36 +54,52 @@ public class BackEnd {
 	public void joinRoom(String roomname){
 		if (roomname == "") 
 			return;
-		chatroomname = roomname;
-		//TODO: If(room exists){connect to server here} else {make a new room with roomname}
-	}
-	
-	//Return a list of all recent messages
-	public List<HashMap<String,String>> getMessages() {
-		ArrayList<HashMap<String,String>> messages = new ArrayList<HashMap<String,String>>();
-		return messages;
 		
+		out.println("ROOM:"+roomname+":"+username); // Handle failure?
+		out.flush();
+		chatroomname = roomname;
 	}
 	
-	//Return a list of all users in the room
-	public List<String> getUsers() {
-		ArrayList<String> users = new ArrayList<String>();
-		return users;
-				
+	private List<String> parseList(String list) {
+		ArrayList<String> things = new ArrayList<String>();
+		
+		for(String s: list.split("|")) {
+			things.add(s);
+		}
+		
+		return things;
 	}
 	
 	public void handleInput(String input) {
 		
-		String[] split = input.split(":");
+		String[] values = input.split(":");
 		
-		switch(split[0]) {
+		switch(values[0]) {
 			case "MESS":
-				
+				ArrayList<String> message = new ArrayList<String>();
+				message.add(values[1]);
+				message.add(values[2]);
+				message.add(values[3]);
+				messages.add(message);
+				frontEnd.updateMessages(messages);
 				break;
 			case "STOP":
+				frontEnd.stop();
 				break;
-			case "ROOM":
+			case "ROOMS":
+				frontEnd.updateRooms(parseList(values[1])); //TODO: Handle lists here
 				break;
+			case "USERS":
+				frontEnd.updateUsers(parseList(values[1]));
+				break;
+			default:
+				ArrayList<String> msg = new ArrayList<String>();
+				msg.add("ERROR");
+				msg.add("Unknown server message - "+input);
+				msg.add("TIME");//LocalTime
+				messages.add(msg);
+				frontEnd.updateMessages(messages);
+
 		}
 		
 	}

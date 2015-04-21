@@ -12,8 +12,12 @@ import java.text.NumberFormat;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -43,44 +47,46 @@ public class FrontEnd {
 	public static final int STARTHEIGHT = 400;
 	public static final int SIDEWIDTH = 200;
 	
-	final JFrame frame;
+	private final JFrame frame;
 	
-	final Box loginBox;
-	JButton loginButton;
-	JButton serverButton;
-	JTextField userField = new JTextField();
-	JTextField ipField;
-	JFormattedTextField portField;
-	JPasswordField passField = new JPasswordField();
-	NumberFormat ipFormat;
-	NumberFormat portFormat;
+	private final Box loginBox;
+	private JButton loginButton;
+	private JButton serverButton;
+	private JTextField userField = new JTextField();
+	private JTextField ipField;
+	private JFormattedTextField portField;
+	private JPasswordField passField = new JPasswordField();
+	private NumberFormat ipFormat;
+	private NumberFormat portFormat;
 	
-	String defusername;
-	String defpassword;
-	String defhostname;
-	int defportnum;
+	private String defusername;
+	private String defpassword;
+	private String defhostname;
+	private int defportnum;
 	
-	Box chatBox;
-	JComboBox<String> chooseChatBox;
-	JButton joinChatButton;
-	JButton chatBackButton;
-	JTextField chatField;
-	JButton chatSubmit;
+	private Box chatBox;
+	private JComboBox<String> chooseChatBox;
+	private JButton joinChatButton;
+	private JButton chatBackButton;
+	private JTextField chatField;
+	private JButton chatSubmit;
+	private JTextArea chatMessArea;
+	private JList<String> userList;
 	
-	Box loadBox;
-	JButton loadBackButton;
+	private Box loadBox;
+	private JButton loadBackButton;
 	
-	Box saveBox;
-	JButton saveButton;
-	JButton saveBackButton;
+	private Box saveBox;
+	private JButton saveButton;
+	private JButton saveBackButton;
 	
-	Box initBox;
-	JButton save = new JButton("Save a message");
-	JButton load = new JButton("Load a message");
-	JButton chat = new JButton("Enter Chat");
-	JButton logOut = new JButton("Log out");
+	private Box initBox;
+	private JButton save = new JButton("Save a message");
+	private JButton load = new JButton("Load a message");
+	private JButton chat = new JButton("Enter Chat");
+	private JButton logOut = new JButton("Log out");
 	
-	BackEnd backend;
+	private BackEnd backend;
 	
 	public FrontEnd(String u, String p, String host, int port) {
 		
@@ -139,16 +145,44 @@ public class FrontEnd {
 		backend.joinRoom(chooseChatBox.getSelectedItem().toString());
 	}
 	
-	public void postMessage() {
+	public void updateMessages(List<List<String>> list) {
+		int col = chatMessArea.getColumns();
+		int row = chatMessArea.getLineCount();
+		ArrayList<String> messages = new ArrayList<String>();
+		for (List<String> values: list) {
+			String s = values.get(3)+":"+values.get(1)+":"+values.get(2);
+			if (s.length() >= col) {
+				
+			} else {
+				messages.add(s);
+			}
+		}
+		String st = messages.get(Math.max(0, messages.size()-row));
+		for (int i= Math.max(0, messages.size()-row)+1; i < messages.size();i++) {
+			st+="\n"+messages.get(i);
+		}
+		chatMessArea.setText(st);
 		
 	}
 	
-	public void updateUser() {
-		
+	public void updateUsers(List<String> list) {
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
+		for(String s: list){
+			model.addElement(s);
+		}
+		chooseChatBox.setModel(model);
 	}
 	
-	public void updateRooms() {
-		
+	public void updateRooms(List<String> list) {
+		DefaultListModel<String> model = new DefaultListModel<String>();
+		for(String s: list){
+			model.addElement(s);
+		}
+		userList.setModel(model);
+	}
+	
+	public void stop() {
+		logout();
 	}
 	
 	private void login() {
@@ -159,6 +193,7 @@ public class FrontEnd {
 		
 		try {
 			backend = new BackEnd(username, password, hostname, port);
+			backend.setFrontEnd(this);
 		} catch (UnknownHostException e) {
 			JOptionPane.showMessageDialog(frame, "Could not reach server "+hostname+":"+Integer.toString(port), "Connection Error", JOptionPane.ERROR_MESSAGE);
 			return;
@@ -176,6 +211,13 @@ public class FrontEnd {
 		frame.pack();
 	}
 	
+	private void logout() {
+		//tell BackEnd to log the user out.
+		frame.remove(initBox);
+		frame.add(loginBox);
+		frame.pack();
+	}
+	
 	private void setupActionListeners(){
 		ActionListener al = new ActionListener() {
 			@Override
@@ -187,11 +229,7 @@ public class FrontEnd {
 					login();
 				}
 				else if (source == logOut) {
-					
-					//tell BackEnd to log the user out.
-					frame.remove(initBox);
-					frame.add(loginBox);
-					frame.pack();
+					logout();
 				}
 				else if (source == chat) {
 					frame.remove(initBox);
@@ -270,6 +308,17 @@ public class FrontEnd {
 		};
 		
 		chatField.addActionListener(alt);
+		
+		ActionListener alr = new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JComboBox<String> source = (JComboBox<String>) arg0.getSource();
+				if (source == chooseChatBox) {
+					joinRoom();
+				}
+			}
+		};
+		
+		chooseChatBox.addActionListener(alr);
 	}
 	
 	private Box makeMenuBox(){
@@ -341,7 +390,7 @@ public class FrontEnd {
 		joinChatButton.setAlignmentY(Component.TOP_ALIGNMENT);
 		
 		ListModel<String> usernames = new DefaultListModel<String>();
-		JList<String> userList = new JList<String>(usernames);
+		userList = new JList<String>(usernames);
 		userList.setAlignmentX(Component.LEFT_ALIGNMENT);
 		userList.setAlignmentY(Component.TOP_ALIGNMENT);
 		userList.setMaximumSize(new Dimension(SIDEWIDTH, 2147483647));
@@ -360,7 +409,7 @@ public class FrontEnd {
 		
 		
 		Box chatMessPane = Box.createVerticalBox();
-		JTextArea chatMessArea = new JTextArea();
+		chatMessArea = new JTextArea();
 		chatMessArea.setEditable(false);
 		chatMessArea.setBackground(Color.white);
 		chatMessArea.setVisible(true);
