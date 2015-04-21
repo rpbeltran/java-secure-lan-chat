@@ -147,19 +147,22 @@ public class FrontEnd {
 	
 	public void updateMessages(List<List<String>> list) {
 		int col = chatMessArea.getColumns();
-		int row = chatMessArea.getLineCount();
+		int row = 23;//chatMessArea.getLineCount(); //Is arbitrary, need to be dynamic
 		ArrayList<String> messages = new ArrayList<String>();
-		for (List<String> values: list) {
-			String s = values.get(3)+":"+values.get(1)+":"+values.get(2);
+		for (int i=0;i<list.size();i++) {
+			List<String> values = list.get(i);
+			String s = values.get(2)+":"+values.get(0)+":"+values.get(1);
 			if (s.length() >= col) {
-				
+				messages.add(s);
 			} else {
 				messages.add(s);
 			}
 		}
-		String st = messages.get(Math.max(0, messages.size()-row));
-		for (int i= Math.max(0, messages.size()-row)+1; i < messages.size();i++) {
-			st+="\n"+messages.get(i);
+		int min = Math.max(0, messages.size()-row);
+		String st = messages.get(min);
+		for (int i= min+1; i < messages.size();i++) {
+			st += "\n"+messages.get(i);
+			System.out.println(i);
 		}
 		chatMessArea.setText(st);
 		

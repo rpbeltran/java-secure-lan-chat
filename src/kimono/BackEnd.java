@@ -24,6 +24,9 @@ public class BackEnd {
 		this.username = username;
 		this.password = password;
 		this.chatroomname = "";
+		
+		messages = new ArrayList<List<String>>();
+		
 		socket = new Socket(hostname, port);
 		in = new Scanner(socket.getInputStream());
 		out = new PrintWriter(socket.getOutputStream());
@@ -43,7 +46,10 @@ public class BackEnd {
 	
 	//Send message to current chatroom
 	public void sendMessage(String message){
-		if (chatroomname == "") return; //Not in chat room
+		if (chatroomname == "") {
+			errorMessage("ALERT", "Please join a room");
+			return;
+		}; //Not in chat room
 		
 		out.println("MESS:"+chatroomname+":"+username+":"+message);
 		out.flush();
@@ -52,7 +58,7 @@ public class BackEnd {
 	
 	//Join or instantiate a chat room
 	public void joinRoom(String roomname){
-		if (roomname == "") 
+		if (roomname == "") //Should exit room
 			return;
 		
 		out.println("ROOM:"+roomname+":"+username); // Handle failure?
@@ -93,15 +99,18 @@ public class BackEnd {
 				frontEnd.updateUsers(parseList(values[1]));
 				break;
 			default:
-				ArrayList<String> msg = new ArrayList<String>();
-				msg.add("ERROR");
-				msg.add("Unknown server message - "+input);
-				msg.add("TIME");//LocalTime
-				messages.add(msg);
-				frontEnd.updateMessages(messages);
+				errorMessage("ERROR", "Unknown server message - "+input);
 
-		}
+		}		
 		
 	}
 	
+	public void errorMessage(String tag, String m){
+		ArrayList<String> msg = new ArrayList<String>();
+		msg.add(tag);
+		msg.add(m);
+		msg.add(Integer.toString(messages.size()+1));//LocalTime
+		messages.add(msg);
+		frontEnd.updateMessages(messages);
+	}
 }
