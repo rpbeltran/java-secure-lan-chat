@@ -142,6 +142,12 @@ public class FrontEnd {
 	}
 	
 	private void joinRoom() {
+		Object selection = chooseChatBox.getSelectedItem();
+		Object textEdit = chooseChatBox.getEditor().getItem();
+		if (selection == null || !selection.equals(textEdit)) {
+			chooseChatBox.addItem((String) textEdit); // TODO make sure that joining the room was possible
+			chooseChatBox.setSelectedItem(textEdit);
+		}
 		backend.joinRoom(chooseChatBox.getSelectedItem().toString());
 	}
 	

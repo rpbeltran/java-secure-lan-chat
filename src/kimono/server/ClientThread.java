@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalTime;
 import java.util.Scanner;
 
 public class ClientThread extends Thread implements Closeable {
@@ -59,6 +60,7 @@ public class ClientThread extends Thread implements Closeable {
 	public void evaluateInput(String input) {
 		
 		String[] split = input.split(""+NETWORK_SEPARATOR);
+		System.out.println(input);
 		
 		switch(split[0]) {
 			case "QUIT": {
@@ -81,7 +83,8 @@ public class ClientThread extends Thread implements Closeable {
 				String room = split[1];
 				String username = split[2];
 				String message = split[3];
-				String timestamp = split[4];
+				//String timestamp = split[4];
+				String timestamp = LocalTime.now().toString();
 				
 				// TODO do something more intricate. Currently this just echoes back to client.
 				
