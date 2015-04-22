@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
+import kimono.server.ClientThread;
+
 public class BackEnd {
 	
 	private String username;
@@ -19,6 +21,8 @@ public class BackEnd {
 	private PrintWriter out;
 	private FrontEnd frontEnd;
 	private List<List<String>> messages;
+	
+	private static final String SEP = ClientThread.NETWORK_SEPARATOR;
 	
 	public BackEnd(String username, String password, String hostname, int port)  throws UnknownHostException, IOException{
 		this.username = username;
@@ -31,7 +35,7 @@ public class BackEnd {
 		in = new Scanner(socket.getInputStream());
 		out = new PrintWriter(socket.getOutputStream());
 		
-		out.println("LOGIN:"+username+":"+password);
+		out.println("LOGIN"+SEP+username+SEP+password);
 		out.flush();
 	}
 	
@@ -50,8 +54,9 @@ public class BackEnd {
 			errorMessage("ALERT", "Please join a room");
 			return;
 		}; //Not in chat room
+		String timestamp = "TIME";
 		
-		out.println("MESS:"+chatroomname+":"+username+":"+message);
+		out.println("MESS"+SEP+chatroomname+SEP+username+SEP+message+SEP+timestamp);
 		out.flush();
 		
 	}
@@ -61,7 +66,7 @@ public class BackEnd {
 		if (roomname == "") //Should exit room
 			return;
 		
-		out.println("ROOM:"+roomname+":"+username); // Handle failure?
+		out.println("ROOM"+SEP+roomname+SEP+username); // Handle failure?
 		out.flush();
 		chatroomname = roomname;
 	}
@@ -78,7 +83,7 @@ public class BackEnd {
 	
 	public void handleInput(String input) {
 		
-		String[] values = input.split(":");
+		String[] values = input.split(SEP);
 		
 		switch(values[0]) {
 			case "MESS":
