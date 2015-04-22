@@ -8,6 +8,8 @@ import java.util.Scanner;
 
 public class ClientThread extends Thread implements Closeable {
 	
+	public static final char NETWORK_SEPARATOR = ':';
+	
 	private KimonoServer server;
 	private Socket socket;
 	
@@ -37,7 +39,7 @@ public class ClientThread extends Thread implements Closeable {
 		while(persist) {
 			if (in.hasNext()) {
 				String input = in.nextLine();
-				System.out.println(this.getName()+" received input: "+input);
+				evaluateInput(input);
 			}
 		}
 	}
@@ -56,14 +58,45 @@ public class ClientThread extends Thread implements Closeable {
 	
 	public void evaluateInput(String input) {
 		
-		if (input.startsWith("QUIT")) {
-			close();
-		} else if (input.startsWith("LOGIN")) { // Input should be in the form of 
-			String[] params = input.split(":"); // 
-			String username = params[1];
-			String password = params[2];
+		String[] split = input.split(""+NETWORK_SEPARATOR);
+		
+		switch(split[0]) {
+			case "QUIT": {
+				close();
+				break;
+			}
+			case "LOGIN": {
+				String username = split[1];
+				String password = split[2];
+				
+				// TODO do something with these. (authentication)
+				break;
+			}
+			case "ROOM": {
+				String room = split[1];
+				String username = split[2];
+				break;
+			}
+			case "MESS": {
+				String room = split[1];
+				String username = split[2];
+				String message = split[3];
+				String timestamp = split[4];
+				
+				// TODO do something more intricate. Currently this just echoes back to client.
+				
+				out.println(formMessage("MESS", new String[]{username, message, timestamp}));
+			}
 		}
 		
+	}
+	
+	private static String formMessage(String key, String[] values) {
+		String ret = key;
+		for (String s : values) {
+			ret += NETWORK_SEPARATOR + s;
+		}
+		return ret;
 	}
 	
 }
