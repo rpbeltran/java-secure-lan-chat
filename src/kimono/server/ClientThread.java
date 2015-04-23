@@ -89,6 +89,7 @@ public class ClientThread extends Thread implements Closeable {
 				// TODO do something more intricate. Currently this just echoes back to client.
 				
 				out.println(formMessage("MESS", new String[]{username, message, timestamp}));
+				out.flush();
 			}
 		}
 		

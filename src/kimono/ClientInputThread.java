@@ -12,6 +12,7 @@ public class ClientInputThread extends Thread implements Closeable {
 	public ClientInputThread(Scanner in, BackEnd backend) {
 		this.in = in;
 		this.backend = backend;
+		continueRunning = true;
 	}
 	
 	@Override

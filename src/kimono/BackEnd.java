@@ -5,7 +5,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -21,12 +20,13 @@ public class BackEnd {
 	private PrintWriter out;
 	private FrontEnd frontEnd;
 	private List<List<String>> messages;
+	private ClientInputThread thread;
 	
 	private static final String SEP = ClientThread.NETWORK_SEPARATOR;
 	
-	public BackEnd(String username, String password, String hostname, int port)  throws UnknownHostException, IOException{
-		this.username = username;
-		this.password = password;
+	public BackEnd(String user, String pass, String hostname, int port)  throws UnknownHostException, IOException{
+		this.username = user;
+		this.password = pass;
 		this.chatroomname = "";
 		
 		messages = new ArrayList<List<String>>();
@@ -37,6 +37,9 @@ public class BackEnd {
 		
 		out.println("LOGIN"+SEP+username+SEP+password);
 		out.flush();
+		
+		thread = new ClientInputThread(in, this);
+		thread.start();
 	}
 	
 	public void setFrontEnd(FrontEnd fe) {
@@ -84,6 +87,7 @@ public class BackEnd {
 	public void handleInput(String input) {
 		
 		String[] values = input.split(SEP);
+		System.out.println(input);
 		
 		switch(values[0]) {
 			case "MESS":
