@@ -9,13 +9,13 @@ import java.util.Scanner;
 
 public class ClientThread extends Thread implements Closeable {
 	
-	public static final String SEP = "\t";
+	private static final String SEP = KimonoServer.SEP;
 	
 	private KimonoServer server;
 	private Socket socket;
 	
 	private Scanner in;
-	private PrintWriter out;
+	public PrintWriter out;
 	
 	private static int threadNumber = 1;
 	
@@ -40,7 +40,7 @@ public class ClientThread extends Thread implements Closeable {
 		while(persist) {
 			if (in.hasNext()) {
 				String input = in.nextLine();
-				evaluateInput(input);
+				server.evaluateInput(input, this);
 			}
 		}
 	}
@@ -59,52 +59,6 @@ public class ClientThread extends Thread implements Closeable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	public void evaluateInput(String input) {
-		
-		String[] split = input.split(SEP);
-		System.out.println(input);
-		
-		switch(split[0]) {
-			case "QUIT": {
-				close();
-				break;
-			}
-			case "LOGIN": {
-				String username = split[1];
-				String password = split[2];
-				
-				// TODO do something with these. (authentication)
-				break;
-			}
-			case "ROOM": {
-				String room = split[1];
-				String username = split[2];
-				break;
-			}
-			case "MESS": {
-				String room = split[1];
-				String username = split[2];
-				String message = split[3];
-				String timestamp = split[4];
-				//String timestamp = LocalTime.now().toString();
-				
-				// TODO do something more intricate. Currently this just echoes back to client.
-				
-				out.println(formMessage("MESS", new String[]{username, message, timestamp}));
-				out.flush();
-			}
-		}
-		
-	}
-	
-	private static String formMessage(String key, String[] values) {
-		String ret = key;
-		for (String s : values) {
-			ret += SEP + s;
-		}
-		return ret;
 	}
 	
 }

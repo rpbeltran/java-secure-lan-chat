@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import kimono.server.ClientThread;
+import kimono.server.KimonoServer;
 
 public class BackEnd implements Closeable {
 	
@@ -23,7 +24,7 @@ public class BackEnd implements Closeable {
 	private List<List<String>> messages;
 	private ClientInputThread thread;
 	
-	private static final String SEP = ClientThread.SEP;
+	private static final String SEP = KimonoServer.SEP;
 	
 	public BackEnd(String user, String pass, String hostname, int port)  throws UnknownHostException, IOException{
 		this.username = user;
@@ -79,11 +80,12 @@ public class BackEnd implements Closeable {
 	
 	private List<String> parseList(String list) {
 		ArrayList<String> things = new ArrayList<String>();
+		String[] sp = list.split(KimonoServer.LISTSEP);
 		
-		for(String s: list.split("|")) {
+		for(String s: sp) {
 			things.add(s);
 		}
-		
+		System.out.println(sp.toString());
 		return things;
 	}
 	
@@ -105,6 +107,11 @@ public class BackEnd implements Closeable {
 				frontEnd.logout();
 				break;
 			case "ROOMS":
+				if (values.length<=1) {
+					frontEnd.updateRooms(new ArrayList());
+					break;
+				}
+					
 				frontEnd.updateRooms(parseList(values[1])); //TODO: Handle lists here
 				break;
 			case "USERS":
@@ -121,7 +128,7 @@ public class BackEnd implements Closeable {
 		ArrayList<String> msg = new ArrayList<String>();
 		msg.add(tag);
 		msg.add(m);
-		msg.add(Integer.toString(messages.size()+1));//LocalTime
+		msg.add("TIME");//LocalTime
 		messages.add(msg);
 		frontEnd.updateMessages(messages);
 	}
@@ -129,7 +136,7 @@ public class BackEnd implements Closeable {
 	@Override
 	public void close() {
 		
-		out.println("QUIT");
+		out.println("QUIT"+SEP+username);
 		out.flush();
 		thread.close();
 		try {

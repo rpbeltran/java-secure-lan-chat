@@ -10,7 +10,7 @@ public class Hallway {
 	Settings settings;
 	
 	List<Hallway> hallways;
-	List<Room> rooms;
+	List<RoomOld> rooms;
 	
 	public Hallway(String name, User owner, boolean isPrivate){
 	
@@ -19,7 +19,7 @@ public class Hallway {
 		settings = new Settings();
 		
 		hallways = new ArrayList<Hallway>();
-		rooms = new ArrayList<Room>();
+		rooms = new ArrayList<RoomOld>();
 
 	}
 	
@@ -31,10 +31,10 @@ public class Hallway {
 		return hallways;
 	}
 	
-	public void addRoom(Room child){
+	public void addRoom(RoomOld child){
 		rooms.add(child);
 	}
-	public List<Room> getRooms(){
+	public List<RoomOld> getRooms(){
 		return rooms;
 	}
 

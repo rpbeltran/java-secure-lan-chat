@@ -1,57 +1,68 @@
-
 package kimono.room;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
+import java.util.HashSet;
+import java.util.Set;
 
-import kimono.encryption.*;
+import kimono.server.ClientThread;
 
 public class Room {
 	
-	private String roomName;
-	private int roomKey;
-	public CryptoAlgorithm encryptionType;
-	public RoomFile roomFile;
-	public AccessManager accessManager;
-	public Settings settings;
-	private String roomAESKey;
+	public String name;
+	private Set<User> users;
+	private User admin;
 	
-	public Room(String name, User owner,  boolean isPrivate){
+	public Room(String name, User admin) {
+		this.name = name;
+		this.admin = admin;
 		
-		roomName = name;
-		//Only for insecure test algorithms
-		roomKey = (int)(Math.random()*999);
-		
-		//Used for AES real encryption
-		SecureRandom random = new SecureRandom();
-		roomAESKey = new BigInteger(130, random).toString(32);
-		
-		encryptionType = new AES(roomAESKey);
-		
-		accessManager = new AccessManager(owner, !isPrivate);
-		roomFile = new RoomFile(buildFilename());
-		settings = new Settings();
-		
-		roomFile.writeOver("***Encryption: Strong\n");
+		users = new HashSet<User>();
+		users.add(admin);
 	}
 	
-	public void recordMessage(User user, String message){
-		
-		if(!accessManager.isUserAllowed(user)){
-			System.out.println("Authentication Invalid, please log in as entitled user");
-			return;
+	public void join(User u) {
+		users.add(u);
+	}
+	
+	public void leave(User u) {
+		users.remove(u);
+	}
+	
+	public void setAdmin(User u) {
+		admin = u;
+	}
+	
+	public Set<ClientThread> getClientThreads() {
+		Set<ClientThread> threads = new HashSet<ClientThread>();
+		for (User u: users) {
+			threads.add(u.getThread());
 		}
-		String fullMessage = ">>>" + user.getUsername() + " said:\n" + "   " + message;
-		fullMessage = encryptionType.encrypt(fullMessage, roomKey);
-		roomFile.writeAfter(fullMessage);
+		return threads;
 	}
 	
-	private String buildFilename(){
-		return roomName+".ckr";
+	public Set<User> getUsers() {
+		return users;
 	}
 	
-	public int getRoomKey(){
-		return roomKey;
+	public boolean isAdmin(User u) {
+		return admin.equals(u);
 	}
-
+	
+	public boolean isPresent(User u) {
+		for (User user: users) {
+			if (user.equals(u)) return true;
+		}
+		return false;
+	}
+	
+	public boolean isEmpty(){
+		if (users.size() <= 0) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
 }

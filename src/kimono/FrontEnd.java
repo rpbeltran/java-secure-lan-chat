@@ -5,6 +5,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.text.NumberFormat;
@@ -72,6 +77,7 @@ public class FrontEnd {
 	private JButton chatSubmit;
 	private JTextArea chatMessArea;
 	private JList<String> userList;
+	private JScrollPane listScroller;
 	
 	private Box loadBox;
 	private JButton loadBackButton;
@@ -90,9 +96,9 @@ public class FrontEnd {
 	
 	public FrontEnd(String u, String p, String host, int port) {
 		
-		   try {
-			      UIManager.setLookAndFeel(new WindowsLookAndFeel());
-			   } catch (Exception e) {}
+	    try {
+		      UIManager.setLookAndFeel(new WindowsLookAndFeel());
+	    } catch (Exception e) {}
 			
 		
 		defusername = u;
@@ -103,6 +109,45 @@ public class FrontEnd {
 		//Make a blank JFrame
 		frame = new JFrame("Closed Kimono ver. "+Kimono.VERSION);
 		frame.setResizable(false);
+		
+		frame.addComponentListener(new ComponentListener(){
+
+			@Override
+			public void componentHidden(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void componentResized(ComponentEvent arg0) {
+				//System.out.println("RESIZE");
+				chatBox.setPreferredSize(new Dimension(frame.getContentPane().getWidth()-20, frame.getContentPane().getHeight()-20));		
+				chatBox.validate();	
+			}
+
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
+		frame.addWindowListener(new WindowAdapter()
+		{
+		    public void windowClosing(WindowEvent e)
+		    {
+		        if (backend != null) {
+		        	logout();
+		        }
+		    }
+		});
 		
 		//Add padding
 		JPanel contentPanel = new JPanel();
@@ -174,7 +219,7 @@ public class FrontEnd {
 		
 	}
 	
-	public void updateUsers(List<String> list) {
+	public void updateRooms(List<String> list) {
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
 		for(String s: list){
 			model.addElement(s);
@@ -182,7 +227,7 @@ public class FrontEnd {
 		chooseChatBox.setModel(model);
 	}
 	
-	public void updateRooms(List<String> list) {
+	public void updateUsers(List<String> list) {
 		DefaultListModel<String> model = new DefaultListModel<String>();
 		for(String s: list){
 			model.addElement(s);
@@ -213,12 +258,20 @@ public class FrontEnd {
 		frame.remove(loginBox);
 		frame.add(chatBox);
 		frame.setResizable(true);
+		
+		chatField.requestFocus();
+		chatBox.setPreferredSize(new Dimension(STARTWIDTH,STARTHEIGHT));
+		chatBox.validate();
 		frame.pack();
 	}
 	
 	void logout() {
-		
 		backend.close();
+		backend = null;
+	}
+	
+	private void returnToLogin() {
+		logout();
 		
 		frame.remove(saveBox);
 		frame.remove(loadBox);
@@ -240,7 +293,7 @@ public class FrontEnd {
 					login();
 				}
 				else if (source == logOut) {
-					logout();
+					returnToLogin();
 				}
 				else if (source == chat) {
 					frame.remove(initBox);
@@ -249,7 +302,7 @@ public class FrontEnd {
 					frame.pack();
 				}	
 				else if (source.getText().equals("Back")) {
-					logout();
+					returnToLogin();
 				}
 				else if (source == save) {
 					frame.remove(initBox);
@@ -404,7 +457,12 @@ public class FrontEnd {
 		userList.setVisibleRowCount(15);
 		userList.setBackground(Color.white);
 		userList.setVisible(true);
-		JScrollPane listScroller = new JScrollPane(userList);
+		
+		listScroller = new JScrollPane(userList);
+		listScroller.setMaximumSize(new Dimension(SIDEWIDTH, 2147483647));
+		listScroller.setMinimumSize(new Dimension(SIDEWIDTH, 48));
+		listScroller.setAlignmentX(Component.LEFT_ALIGNMENT);
+		listScroller.setAlignmentY(Component.TOP_ALIGNMENT);
 		
 		chatSideBox.add(chooseChatBox);
 		chatSideBox.add(joinChatButton);
@@ -433,23 +491,33 @@ public class FrontEnd {
 		
 		chatBackButton = new JButton("Back");
 		chatBackButton.setFocusable(false);
+		chatBackButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+		chatBackButton.setAlignmentY(Component.TOP_ALIGNMENT);
 		chatField = new JTextField();
 		chatField.setMaximumSize(new Dimension(2147483647,48));
 		chatField.setMinimumSize(new Dimension(10,48));
+		chatField.setAlignmentX(Component.LEFT_ALIGNMENT);
+		chatField.setAlignmentY(Component.TOP_ALIGNMENT);
 		chatSubmit = new JButton(">");
 		chatSubmit.setFocusable(false);
+		chatSubmit.setAlignmentX(Component.LEFT_ALIGNMENT);
+		chatSubmit.setAlignmentY(Component.TOP_ALIGNMENT);
 		chatSubmit.setMinimumSize(new Dimension(48,48));
 		Box chatInitLoadBox = Box.createHorizontalBox();
 		chatInitLoadBox.add(chatField);
 		chatInitLoadBox.add(chatSubmit);
 		chatInitLoadBox.add(chatBackButton);
 		chatInitLoadBox.setAlignmentX(Component.LEFT_ALIGNMENT);
+		chatInitLoadBox.setAlignmentY(Component.TOP_ALIGNMENT);
+		chatInitLoadBox.setMaximumSize(new Dimension(2147483647,48));
+		chatInitLoadBox.setMinimumSize(new Dimension(10,48));
 		cb.add(chatTop);
 		cb.add(chatInitLoadBox);
 		cb.setAlignmentX(Component.LEFT_ALIGNMENT);
+		cb.setAlignmentY(Component.TOP_ALIGNMENT);
 		cb.setMinimumSize(new Dimension(300,200));
 		frame.setMinimumSize(new Dimension(300,200));
-		cb.setPreferredSize(new Dimension(STARTWIDTH,STARTHEIGHT));		
+		cb.setPreferredSize(new Dimension(STARTWIDTH,STARTHEIGHT));	
 		return cb;
 	}
 	
