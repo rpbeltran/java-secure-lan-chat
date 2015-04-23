@@ -1,5 +1,6 @@
 package kimono;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -10,7 +11,7 @@ import java.util.Scanner;
 
 import kimono.server.ClientThread;
 
-public class BackEnd {
+public class BackEnd implements Closeable {
 	
 	private String username;
 	private String password;
@@ -59,7 +60,7 @@ public class BackEnd {
 		}; //Not in chat room
 		String timestamp = "TIME";
 		
-		message = message.replaceAll("\t", "\\t"); // replace instances of a TAB character with the escaped version
+		message = message.replaceAll("\t", "[TAB]"); // replace instances of a TAB character with the escaped version
 		
 		out.println("MESS"+SEP+chatroomname+SEP+username+SEP+message+SEP+timestamp);
 		out.flush();
@@ -95,13 +96,13 @@ public class BackEnd {
 			case "MESS":
 				ArrayList<String> message = new ArrayList<String>();
 				message.add(values[1]);
-				message.add(values[2].replaceAll("\\t", "\t")); // Replace escaped TAB characters with real ones.
+				message.add(values[2].replaceAll("\\[TAB\\]", "\t")); // Replace escaped TAB characters with real ones.
 				message.add(values[3]);
 				messages.add(message);
 				frontEnd.updateMessages(messages);
 				break;
-			case "STOP":
-				frontEnd.stop();
+			case "QUIT":
+				frontEnd.logout();
 				break;
 			case "ROOMS":
 				frontEnd.updateRooms(parseList(values[1])); //TODO: Handle lists here
@@ -123,5 +124,21 @@ public class BackEnd {
 		msg.add(Integer.toString(messages.size()+1));//LocalTime
 		messages.add(msg);
 		frontEnd.updateMessages(messages);
+	}
+
+	@Override
+	public void close() {
+		
+		out.println("QUIT");
+		out.flush();
+		thread.close();
+		try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 }

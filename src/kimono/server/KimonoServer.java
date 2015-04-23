@@ -3,6 +3,7 @@ package kimono.server;
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -37,15 +38,15 @@ public class KimonoServer implements Closeable {
 	public void close() {
 		
 		connectionThread.close();
+		
+		for (ClientThread ct : new ArrayList<ClientThread>(getClientThreads())) {
+			ct.close();
+		}
 		try {
 			getServerSocket().close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		
-		for (ClientThread ct : getClientThreads()) {
-			ct.close();
 		}
 	}
 	

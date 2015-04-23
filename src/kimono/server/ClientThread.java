@@ -48,6 +48,10 @@ public class ClientThread extends Thread implements Closeable {
 	@Override
 	public void close() {
 		persist = false;
+		
+		out.println("QUIT");
+		out.flush();
+		
 		server.getClientThreads().remove(this);
 		try {
 			socket.close();

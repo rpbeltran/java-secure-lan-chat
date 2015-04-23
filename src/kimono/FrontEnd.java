@@ -157,7 +157,7 @@ public class FrontEnd {
 		ArrayList<String> messages = new ArrayList<String>();
 		for (int i=0;i<list.size();i++) {
 			List<String> values = list.get(i);
-			String s = values.get(2)+":"+values.get(0)+":"+values.get(1);
+			String s = values.get(2)+": <"+values.get(0)+"> "+values.get(1);
 			if (s.length() >= col) {
 				messages.add(s);
 			} else {
@@ -190,10 +190,6 @@ public class FrontEnd {
 		userList.setModel(model);
 	}
 	
-	public void stop() {
-		logout();
-	}
-	
 	private void login() {
 		String username = userField.getText();
 		String password = new String(passField.getPassword());
@@ -220,10 +216,16 @@ public class FrontEnd {
 		frame.pack();
 	}
 	
-	private void logout() {
-		//tell BackEnd to log the user out.
+	void logout() {
+		
+		backend.close();
+		
+		frame.remove(saveBox);
+		frame.remove(loadBox);
+		frame.remove(chatBox);
 		frame.remove(initBox);
 		frame.add(loginBox);
+		frame.setResizable(false);
 		frame.pack();
 	}
 	
@@ -247,12 +249,7 @@ public class FrontEnd {
 					frame.pack();
 				}	
 				else if (source.getText().equals("Back")) {
-					frame.remove(saveBox);
-					frame.remove(loadBox);
-					frame.remove(chatBox);
-					frame.add(loginBox);
-					frame.setResizable(false);
-					frame.pack();
+					logout();
 				}
 				else if (source == save) {
 					frame.remove(initBox);
