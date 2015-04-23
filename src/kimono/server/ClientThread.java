@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class ClientThread extends Thread implements Closeable {
 	
-	public static final String NETWORK_SEPARATOR = ":";
+	public static final String SEP = "\t";
 	
 	private KimonoServer server;
 	private Socket socket;
@@ -59,7 +59,7 @@ public class ClientThread extends Thread implements Closeable {
 	
 	public void evaluateInput(String input) {
 		
-		String[] split = input.split(NETWORK_SEPARATOR);
+		String[] split = input.split(SEP);
 		System.out.println(input);
 		
 		switch(split[0]) {
@@ -98,7 +98,7 @@ public class ClientThread extends Thread implements Closeable {
 	private static String formMessage(String key, String[] values) {
 		String ret = key;
 		for (String s : values) {
-			ret += NETWORK_SEPARATOR + s;
+			ret += SEP + s;
 		}
 		return ret;
 	}

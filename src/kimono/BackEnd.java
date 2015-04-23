@@ -22,7 +22,7 @@ public class BackEnd {
 	private List<List<String>> messages;
 	private ClientInputThread thread;
 	
-	private static final String SEP = ClientThread.NETWORK_SEPARATOR;
+	private static final String SEP = ClientThread.SEP;
 	
 	public BackEnd(String user, String pass, String hostname, int port)  throws UnknownHostException, IOException{
 		this.username = user;
@@ -59,6 +59,8 @@ public class BackEnd {
 		}; //Not in chat room
 		String timestamp = "TIME";
 		
+		message = message.replaceAll("\t", "\\t"); // replace instances of a TAB character with the escaped version
+		
 		out.println("MESS"+SEP+chatroomname+SEP+username+SEP+message+SEP+timestamp);
 		out.flush();
 		
@@ -69,7 +71,7 @@ public class BackEnd {
 		if (roomname == "") //Should exit room
 			return;
 		
-		out.println("ROOM"+SEP+roomname+SEP+username); // Handle failure?
+		out.println("ROOM"+SEP+roomname+SEP+username); // TODO Handle failure?
 		out.flush();
 		chatroomname = roomname;
 	}
@@ -93,7 +95,7 @@ public class BackEnd {
 			case "MESS":
 				ArrayList<String> message = new ArrayList<String>();
 				message.add(values[1]);
-				message.add(values[2]);
+				message.add(values[2].replaceAll("\\t", "\t")); // Replace escaped TAB characters with real ones.
 				message.add(values[3]);
 				messages.add(message);
 				frontEnd.updateMessages(messages);
