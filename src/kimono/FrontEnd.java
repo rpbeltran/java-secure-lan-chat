@@ -238,6 +238,11 @@ public class FrontEnd {
 		String hostname = ipField.getText();
 		int port = Integer.parseInt(portField.getText());
 		
+		if (username.equals("") || password.equals("")) {
+			JOptionPane.showMessageDialog(frame, "Please enter a username and password", "Alert", JOptionPane.WARNING_MESSAGE);
+			return;
+		}
+		
 		try {
 			backend = new BackEnd(username, password, hostname, port);
 			backend.setFrontEnd(this);
