@@ -38,7 +38,7 @@ public class KimonoServer implements Closeable {
 		connectionThread.start();
 	}
 	
-public void evaluateInput(String input, ClientThread thread) {
+	public void evaluateInput(String input, ClientThread thread) {
 		
 		String[] split = input.split(SEP);
 		System.out.println(input);
@@ -71,8 +71,14 @@ public void evaluateInput(String input, ClientThread thread) {
 				}
 				
 				if (rooms.containsKey(room)) {
-					kick(user);
+					
 					Room r = rooms.get(room);
+					
+					if (r.isPresent(user)) {
+						break;
+					}
+					
+					kick(user);
 					r.join(user);
 					updateRooms();
 					updateAllUsers();

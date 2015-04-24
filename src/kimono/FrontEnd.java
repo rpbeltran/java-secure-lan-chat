@@ -366,11 +366,6 @@ public class FrontEnd {
 		
 		chatField.addActionListener(alt);
 		
-		//Ditch listeners and use KeyBindings instead...
-		
-		
-		
-		
 		KeyListener kl = new KeyListener() {
 			@Override
 			public void keyPressed(KeyEvent ke) {
