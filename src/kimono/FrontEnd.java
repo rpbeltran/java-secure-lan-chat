@@ -75,6 +75,7 @@ public class FrontEnd {
 	private JTextArea chatMessArea;
 	private JList<String> userList;
 	private JScrollPane listScroller;
+	private JScrollPane chatScrollPane;
 	
 	private Box loadBox;
 	private JButton loadBackButton;
@@ -206,11 +207,10 @@ public class FrontEnd {
 				messages.add(s);
 			}
 		}
-		int min = Math.max(0, messages.size()-row);
+		int min = 0; //Math.max(0, messages.size()-row); //Remove scrolling limit
 		String st = messages.get(min);
 		for (int i= min+1; i < messages.size();i++) {
 			st += "\n"+messages.get(i);
-			System.out.println(i);
 		}
 		chatMessArea.setText(st);
 		
@@ -488,12 +488,22 @@ public class FrontEnd {
 		chatMessArea.setAlignmentX(Component.LEFT_ALIGNMENT);
 		chatMessArea.setText("");
 		chatMessArea.setBorder(BorderFactory.createEtchedBorder());
+		chatMessArea.setLineWrap(true);
+		chatMessArea.setWrapStyleWord(true);
+		
 		chatMessPane.add(chatMessArea);
 		chatMessPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		chatMessPane.setAlignmentY(Component.TOP_ALIGNMENT);
 		
+		chatScrollPane = new JScrollPane(chatMessPane);
+		chatScrollPane.setVerticalScrollBarPolicy(
+                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		
+		chatScrollPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		chatScrollPane.setAlignmentY(Component.TOP_ALIGNMENT);
+		
 		Box chatTop = Box.createHorizontalBox();
-		chatTop.add(chatMessPane);
+		chatTop.add(chatScrollPane);
 		chatTop.add(chatSideBox);
 		chatTop.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
