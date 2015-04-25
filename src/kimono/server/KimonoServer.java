@@ -6,7 +6,6 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,8 +14,8 @@ import kimono.room.User;
 
 public class KimonoServer implements Closeable {
 	
-	public static final String SEP = "\t";
-	public static final String LISTSEP = "ß";
+	public static final String SEP = ""+((char) 30); // Record separator - ASCII 30.
+	public static final String LISTSEP = ""+((char) 31); // Unit separator - ASCII 31.
 
 	ServerSocket serverSocket;
 	
