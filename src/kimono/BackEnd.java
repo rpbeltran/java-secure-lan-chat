@@ -61,7 +61,6 @@ public class BackEnd implements Closeable {
 		}; //Not in chat room
 		String timestamp = "TIME";
 		
-		message = message.replaceAll("\t", "[TAB]"); // replace instances of a TAB character with the escaped version
 		
 		out.println("MESS"+SEP+chatroomname+SEP+username+SEP+message+SEP+timestamp);
 		out.flush();
@@ -98,7 +97,7 @@ public class BackEnd implements Closeable {
 			case "MESS":
 				ArrayList<String> message = new ArrayList<String>();
 				message.add(values[1]);
-				message.add(values[2].replaceAll("\\[TAB\\]", "\t")); // Replace escaped TAB characters with real ones.
+				message.add(values[2]);
 				message.add(values[3]);
 				messages.add(message);
 				frontEnd.updateMessages(messages);
