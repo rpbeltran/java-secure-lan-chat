@@ -40,6 +40,7 @@ public class ClientThread extends Thread implements Closeable {
 		while(persist) {
 			if (in.hasNext()) {
 				String input = in.nextLine();
+				if (input == null) continue;
 				server.evaluateInput(input, this);
 			}
 		}
