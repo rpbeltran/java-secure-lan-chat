@@ -268,11 +268,12 @@ public class FrontEnd {
 	}
 	
 	void logout() {
+		if (backend == null) return;		
 		backend.close();
 		backend = null;
 	}
 	
-	private void returnToLogin() {
+	void returnToLogin() {
 		logout();
 		
 		frame.remove(saveBox);
@@ -282,6 +283,11 @@ public class FrontEnd {
 		frame.add(loginBox);
 		frame.setResizable(false);
 		frame.pack();
+	}
+	
+	void returnToLogin(String message) {
+		returnToLogin();
+		JOptionPane.showMessageDialog(frame, message, "Disconnected", JOptionPane.ERROR_MESSAGE);
 	}
 	
 	private void setupActionListeners(){

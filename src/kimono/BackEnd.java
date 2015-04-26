@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import kimono.server.ClientThread;
 import kimono.server.KimonoServer;
 
 public class BackEnd implements Closeable {
@@ -103,7 +102,7 @@ public class BackEnd implements Closeable {
 				frontEnd.updateMessages(messages);
 				break;
 			case "QUIT":
-				frontEnd.logout();
+				frontEnd.returnToLogin("Server closed.");
 				break;
 			case "ROOMS":
 				if (values.length<=1) {
