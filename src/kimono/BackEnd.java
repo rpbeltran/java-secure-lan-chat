@@ -68,12 +68,16 @@ public class BackEnd implements Closeable {
 	
 	//Join or instantiate a chat room
 	public void joinRoom(String roomname){
-		if (roomname == "") //Should exit room
+		if (roomname.equals("") || roomname == null) //Should exit room
 			return;
 		
 		out.println("ROOM"+SEP+roomname+SEP+username); // TODO Handle failure?
 		out.flush();
 		chatroomname = roomname;
+	}
+	
+	public String getRoom() {
+		return chatroomname;
 	}
 	
 	private List<String> parseList(String list) {

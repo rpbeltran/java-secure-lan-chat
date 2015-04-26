@@ -222,6 +222,7 @@ public class FrontEnd {
 			model.addElement(s);
 		}
 		chooseChatBox.setModel(model);
+		chooseChatBox.setSelectedItem(backend.getRoom());
 	}
 	
 	public void updateUsers(List<String> list) {
