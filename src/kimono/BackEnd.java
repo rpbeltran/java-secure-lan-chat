@@ -5,7 +5,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -58,7 +60,7 @@ public class BackEnd implements Closeable {
 			errorMessage("ALERT", "Please join a room");
 			return;
 		}; //Not in chat room
-		String timestamp = "TIME";
+		String timestamp = new Time(new Date().getTime()).toString();
 		
 		
 		out.println("MESS"+SEP+chatroomname+SEP+username+SEP+message+SEP+timestamp);
@@ -110,7 +112,7 @@ public class BackEnd implements Closeable {
 				break;
 			case "ROOMS":
 				if (values.length<=1) {
-					frontEnd.updateRooms(new ArrayList());
+					frontEnd.updateRooms(new ArrayList<String>());
 					break;
 				}
 					
@@ -118,6 +120,12 @@ public class BackEnd implements Closeable {
 				break;
 			case "USERS":
 				frontEnd.updateUsers(parseList(values[1]));
+				break;
+			case "INFO":
+				List<String> info = new ArrayList<String>();
+				info.add(values[1]);
+				messages.add(info);
+				frontEnd.updateMessages(messages);
 				break;
 			default:
 				errorMessage("ERROR", "Unknown server message - "+input);

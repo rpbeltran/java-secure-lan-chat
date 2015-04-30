@@ -16,7 +16,7 @@ public class User {
 		this.username = username;
 		this.password = password;
 		this.key = password.hashCode();
-		this.roomKeys = new HashMap(); 
+		this.roomKeys = new HashMap<String, Integer>(); 
 		this.thread = thread;
 	}
 

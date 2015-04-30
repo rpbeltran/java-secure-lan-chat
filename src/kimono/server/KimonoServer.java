@@ -51,13 +51,6 @@ public class KimonoServer implements Closeable {
 				users.remove(username);
 				break;
 			}
-			case "LOGIN": { //Does this even get reached?
-				String username = split[1];
-				String password = split[2];
-				
-				// TODO do something with these. (authentication)
-				break;
-			}
 			case "ROOM": {
 				String room = split[1];
 				String username = split[2];
@@ -69,9 +62,11 @@ public class KimonoServer implements Closeable {
 					break;
 				}
 				
+				Room r = null;
+				
 				if (rooms.containsKey(room)) {
 					
-					Room r = rooms.get(room);
+					r = rooms.get(room);
 					
 					if (r.isPresent(user)) {
 						break;
@@ -87,6 +82,13 @@ public class KimonoServer implements Closeable {
 					updateRooms();
 					updateAllUsers();
 				}
+				
+				r = rooms.get(room);
+				
+				for (ClientThread ct : r.getClientThreads()) {
+					sendRawMessage(ct, username+" joined the room.");
+				}
+				
 				break;
 			}
 			case "MESS": {
@@ -110,6 +112,10 @@ public class KimonoServer implements Closeable {
 		
 	}
 	
+	public static void sendRawMessage(ClientThread ct, String message) {
+		ct.out.println(formMessage("INFO", new String[]{message}));	
+	}
+	
 	public void addUser(String name, String pass, ClientThread thread) {
 		users.put(name, new User(name, pass, thread));
 		inputThreads.add(thread);
@@ -122,7 +128,12 @@ public class KimonoServer implements Closeable {
 	
 	public void kick(User u) {
 		for (Room r: getRooms()) {
-			if (r.isPresent(u)) r.leave(u);
+			if (r.isPresent(u)) {
+				for (ClientThread ct : r.getClientThreads()) {
+					sendRawMessage(ct, u+" left the room.");
+				}
+				r.leave(u);
+			}
 			if (r.isEmpty()) rooms.remove(r.name);
 		}
 	}

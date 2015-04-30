@@ -200,7 +200,12 @@ public class FrontEnd {
 		ArrayList<String> messages = new ArrayList<String>();
 		for (int i=0;i<list.size();i++) {
 			List<String> values = list.get(i);
-			String s = values.get(2)+": <"+values.get(0)+"> "+values.get(1);
+			String s = null;
+			if (values.size() > 1) {
+				s = values.get(2)+": <"+values.get(0)+"> "+values.get(1);
+			} else {
+				s = values.get(0);
+			}
 			if (s.length() >= col) {
 				messages.add(s);
 			} else {
