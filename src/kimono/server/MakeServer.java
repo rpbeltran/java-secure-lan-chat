@@ -24,7 +24,9 @@ public class MakeServer {
 	
 	KimonoServer server;
 	
-	public MakeServer(String user, String password) {
+	public MakeServer(KimonoServer server) {
+		
+		this.server = server;
 		
 		frame = new JFrame("Start a closed kimono server");
 		
@@ -63,43 +65,31 @@ public class MakeServer {
 	public Box makeMenuBox(){
 		Box mb = Box.createVerticalBox();
 		
-		menuButton1 = new JButton("Modify Settings");
-		menuButton2 = new JButton("Manage Users");
-		menuButton3 = new JButton("Export Messages");
+		//menuButton1 = new JButton("Modify Settings");
+		//menuButton2 = new JButton("Manage Users");
+		//menuButton3 = new JButton("Export Messages");
 		menuLogout = new JButton("End Server");
 		
-		menuButton1.setFocusable(false);
-		menuButton2.setFocusable(false);
-		menuButton3.setFocusable(false);
+		//menuButton1.setFocusable(false);
+		//menuButton2.setFocusable(false);
+		//menuButton3.setFocusable(false);
 		menuLogout.setFocusable(false);
 		
-		menuButton1.setPreferredSize(new Dimension(320,90));
-		menuButton2.setPreferredSize(new Dimension(320,90));
-		menuButton3.setPreferredSize(new Dimension(320,90));
-		menuLogout.setPreferredSize(new Dimension(320,30));
+		//menuButton1.setPreferredSize(new Dimension(320,90));
+		//menuButton2.setPreferredSize(new Dimension(320,90));
+		//menuButton3.setPreferredSize(new Dimension(320,90));
+		menuLogout.setPreferredSize(new Dimension(320,320));
 		
-		menuButton1.setMaximumSize(new Dimension(320,90));
-		menuButton2.setMaximumSize(new Dimension(320,90));
-		menuButton3.setMaximumSize(new Dimension(320,90));
-		menuLogout.setMaximumSize(new Dimension(320,30));
+		//menuButton1.setMaximumSize(new Dimension(320,90));
+		//menuButton2.setMaximumSize(new Dimension(320,90));
+		//menuButton3.setMaximumSize(new Dimension(320,90));
+		menuLogout.setMaximumSize(new Dimension(320,320));
 		
-		mb.add(menuButton1);
-		mb.add(menuButton2);
-		mb.add(menuButton3);
+		//mb.add(menuButton1);
+		//mb.add(menuButton2);
+		//mb.add(menuButton3);
 		mb.add(menuLogout);
 		return mb;
-	}
-	
-	public void displayError(String text) {
-		JOptionPane.showMessageDialog(frame, text, "Error!", JOptionPane.ERROR_MESSAGE);
-	}
-	
-	public void makeServer(int port){
-		try {
-			server = new KimonoServer(port);
-		} catch (IOException e) {
-			displayError("IOException thrown. Please check console.\nTry closing any other programs using the port "+port+".\nException specified: "+e.toString());
-		}
 	}
 	
 }

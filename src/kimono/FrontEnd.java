@@ -39,6 +39,7 @@ import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
 
+import kimono.server.KimonoServer;
 import kimono.server.MakeServer;
 
 import com.jgoodies.looks.windows.WindowsLookAndFeel;
@@ -91,6 +92,7 @@ public class FrontEnd {
 	private JButton logOut = new JButton("Log out");
 	
 	private BackEnd backend;
+	private KimonoServer server;
 	
 	public FrontEnd(String u, String p, String host, int port) {
 		
@@ -238,7 +240,7 @@ public class FrontEnd {
 		userList.setModel(model);
 	}
 	
-	private void login() {
+	private boolean login() {
 		String username = userField.getText();
 		String password = new String(passField.getPassword());
 		String hostname = ipField.getText();
@@ -246,7 +248,7 @@ public class FrontEnd {
 		
 		if (username.equals("") || password.equals("")) {
 			JOptionPane.showMessageDialog(frame, "Please enter a username and password", "Alert", JOptionPane.WARNING_MESSAGE);
-			return;
+			return false;
 		}
 		
 		try {
@@ -254,10 +256,10 @@ public class FrontEnd {
 			backend.setFrontEnd(this);
 		} catch (UnknownHostException e) {
 			JOptionPane.showMessageDialog(frame, "Could not reach server "+hostname+":"+Integer.toString(port), "Connection Error", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		} catch (IOException e) {
 			JOptionPane.showMessageDialog(frame, "IO Error: "+e.getMessage(), "Connection Error", JOptionPane.ERROR_MESSAGE);
-			return;
+			return false;
 		} 
 		
 		userField.setText(defusername);
@@ -271,6 +273,8 @@ public class FrontEnd {
 		chatBox.setPreferredSize(new Dimension(STARTWIDTH,STARTHEIGHT));
 		chatBox.validate();
 		frame.pack();
+		
+		return true;
 	}
 	
 	void logout() {
@@ -316,7 +320,23 @@ public class FrontEnd {
 					frame.pack();
 				}	
 				else if (source.getText().equals("Back")) {
-					returnToLogin();
+					if (server != null) {
+						switch (JOptionPane.showConfirmDialog(frame, "Do you want to stop the server as well?", "Closing client...", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE)) {
+							case JOptionPane.YES_OPTION: // Close server and log out of client
+								returnToLogin();
+								server.close();
+								server = null;
+								break; 
+							case JOptionPane.NO_OPTION: // Create a GUI that has just a "Stop server" button
+								returnToLogin();
+								frame.dispose();
+								new MakeServer(server);
+								break;
+								// Otherwise, do nothing.
+						}
+					} else {
+						returnToLogin();
+					}
 				}
 				else if (source == save) {
 					frame.remove(initBox);
@@ -329,15 +349,34 @@ public class FrontEnd {
 					frame.pack();
 				} 
 				else if (source == serverButton) {
-					frame.dispose();
-					
-					String username = userField.getText();
-					String password = new String(passField.getPassword());
-					
-					userField.setText(defusername);
-					passField.setText(defpassword);
-					MakeServer myServer = new MakeServer(username, password);
-					myServer.makeServer(32800);
+					if (server != null) {
+						switch (JOptionPane.showConfirmDialog(frame, "There is a server already running. Are you sure you want to start one, replacing the old server?", "A server's already running! :O", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+						case JOptionPane.NO_OPTION:
+							return;
+						default:
+							server.close();
+							JOptionPane.showMessageDialog(frame, "The current server has been closed, and another one will be started.", "Closing server", JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+					try {
+						server = new KimonoServer(32800);
+					} catch (IOException e) {
+						switch (JOptionPane.showConfirmDialog(frame, "Could not start server!\nIOException: "+e.getMessage()+"\nWould you like to log into an existing server at this location instead?", "Could not start server :O", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE)) {
+						case JOptionPane.YES_OPTION:
+							login();
+							break;
+							// Otherwise, do nothing. We'll stay in the login window.
+						}
+						return;
+					}
+					switch (JOptionPane.showConfirmDialog(frame, "Would you like to start a client and connect to this server as well?", "Server started! Start client too?", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+					case JOptionPane.YES_OPTION:
+						login();
+						break;
+					default:
+						frame.dispose();
+						new MakeServer(server);
+					}
 				}
 				else if (source == chatSubmit) {
 					sendMessage();
