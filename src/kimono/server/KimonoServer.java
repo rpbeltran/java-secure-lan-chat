@@ -49,6 +49,8 @@ public class KimonoServer implements Closeable {
 				thread.close();
 				kick(users.get(username));
 				users.remove(username);
+				updateRooms();
+				updateAllUsers();
 				break;
 			}
 			case "ROOM": {
@@ -157,7 +159,7 @@ public class KimonoServer implements Closeable {
 	private void updateUsers(Room r) {
 		String[] usernames = setToStrings(r.getUsers());
 		String mes = "USERS"+SEP+joinList(usernames, LISTSEP);
-		
+		System.out.println("Updating users in room "+r.name);
 		for (ClientThread ct: r.getClientThreads()) {
 			ct.out.println(mes);
 			ct.out.flush();

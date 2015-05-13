@@ -40,7 +40,7 @@ import javax.swing.border.Border;
 import javax.swing.text.MaskFormatter;
 
 import kimono.server.KimonoServer;
-import kimono.server.MakeServer;
+import kimono.server.ServerGUI;
 
 import com.jgoodies.looks.windows.WindowsLookAndFeel;
 
@@ -330,7 +330,7 @@ public class FrontEnd {
 							case JOptionPane.NO_OPTION: // Create a GUI that has just a "Stop server" button
 								returnToLogin();
 								frame.dispose();
-								new MakeServer(server);
+								new ServerGUI(server);
 								break;
 								// Otherwise, do nothing.
 						}
@@ -375,7 +375,7 @@ public class FrontEnd {
 						break;
 					default:
 						frame.dispose();
-						new MakeServer(server);
+						new ServerGUI(server);
 					}
 				}
 				else if (source == chatSubmit) {
