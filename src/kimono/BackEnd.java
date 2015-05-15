@@ -142,6 +142,10 @@ public class BackEnd implements Closeable {
 		messages.add(msg);
 		frontEnd.updateMessages(messages);
 	}
+	
+	public void handleCLIInput(String input) {
+		
+	}
 
 	@Override
 	public void close() {

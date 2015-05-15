@@ -16,6 +16,7 @@ public class CommandLineInterface {
 	BackEnd backend;
 	KimonoServer server;
 	private static HashMap<String, String> commands;
+	private CLIThread thread;
 	
 	public CommandLineInterface(boolean isserver,String u, String p, String host, int port) {
 		System.out.println();
@@ -63,12 +64,9 @@ public class CommandLineInterface {
 	}
 	
 	private void runClient(boolean admin){
-		System.out.println("Welcome to Closed Kimono");
-		System.out.println();
-		help();
-		System.out.println("Available rooms: ");
-		//Display available rooms
-		//Somehow make CLI here
+		System.out.println("Running client now.");
+		thread = new CLIThread(br, backend);
+		thread.start();
 	}
 	
 	private boolean runCommand(String cmd, boolean admin) {
