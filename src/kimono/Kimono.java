@@ -92,7 +92,7 @@ public class Kimono {
 			SwingUtilities.invokeLater(new Runnable() {
 				@Override
 				public void run() {
-					new FrontEnd(fu,fp,fhost,fport);
+					new GraphicalInterface(fu,fp,fhost,fport);
 				}
 			});
 		}

@@ -21,7 +21,9 @@ public class BackEnd implements Closeable {
 	private Socket socket;
 	private Scanner in;
 	private PrintWriter out;
+	
 	private FrontEnd frontEnd;
+	
 	private List<List<String>> messages;
 	private ClientInputThread thread;
 	
@@ -105,7 +107,7 @@ public class BackEnd implements Closeable {
 				message.add(values[2]);
 				message.add(values[3]);
 				messages.add(message);
-				frontEnd.updateMessages(messages);
+				frontEnd.addMessage(FrontEnd.formatMessage(message));
 				break;
 			case "QUIT":
 				frontEnd.returnToLogin("Server closed.");
@@ -125,7 +127,7 @@ public class BackEnd implements Closeable {
 				List<String> info = new ArrayList<String>();
 				info.add(values[1]);
 				messages.add(info);
-				frontEnd.updateMessages(messages);
+				frontEnd.addMessage(values[1]);
 				break;
 			default:
 				errorMessage("ERROR", "Unknown server message - "+input);
@@ -140,7 +142,7 @@ public class BackEnd implements Closeable {
 		msg.add(m);
 		msg.add("TIME");//LocalTime
 		messages.add(msg);
-		frontEnd.updateMessages(messages);
+		frontEnd.addMessage(tag+": "+m);
 	}
 	
 	public void handleCLIInput(String input) {

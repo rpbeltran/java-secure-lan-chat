@@ -100,8 +100,6 @@ public class KimonoServer implements Closeable {
 				String timestamp = split[4];
 				//String timestamp = LocalTime.now().toString();
 				
-				// TODO do something more intricate. Currently this just echoes back to client.
-				
 				Room r = rooms.get(room);
 				
 				for (ClientThread ct: r.getClientThreads()) {

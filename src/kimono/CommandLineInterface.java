@@ -6,39 +6,56 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Scanner;
 
 import kimono.server.KimonoServer;
 
-public class CommandLineInterface {
+public class CommandLineInterface extends FrontEnd {
 
 	BufferedReader br;
 	BackEnd backend;
 	KimonoServer server;
 	private static HashMap<String, String> commands;
 	private CLIThread thread;
+	String username, password, host;
+	int port;
+	boolean isServer;
 	
-	public CommandLineInterface(boolean isserver,String u, String p, String host, int port) {
-		System.out.println();
+	public CommandLineInterface(boolean isServer, String u, String p, String host, int port) {
+		
+		this.isServer = isServer;
+		this.username = u;
+		this.password = p;
+		this.host = host;
+		this.port = port;
+		
 		br = new BufferedReader(new InputStreamReader(System.in));
-		if (!u.equals("")) System.out.println("User: "+u);
-		while (u.equals("")) {
+		
+		
+	}
+	
+	@Override
+	public boolean login() {
+		System.out.println();
+		if (!username.equals("")) System.out.println("User: "+username);
+		while (username.equals("")) {
 			System.out.print("Username: ");
-			u = input();
+			username = input();
 		}
-		while (p.equals("")) {
+		while (password.equals("")) {
 			System.out.print("Password: ");
 			Console c = System.console();
 			if (c != null) { // If this is a valid console, it will not print the password.
-				p = new String(System.console().readPassword());
+				password = new String(System.console().readPassword());
 			} else { // On the other hand, Eclipse doesn't give us one. This is not the preferred method.
-				p = new Scanner(System.in).nextLine();
+				password = new Scanner(System.in).nextLine();
 			}
 		}
 		
 		setUpCommands();
 		
-		if (isserver) {
+		if (isServer) {
 			try {
 				server = new KimonoServer(port);
 			} catch (IOException e) {
@@ -49,7 +66,8 @@ public class CommandLineInterface {
 		} else {
 			
 			try {
-				backend = new BackEnd(u, p, host, port);
+				backend = new BackEnd(username, password, host, port);
+				backend.setFrontEnd(this);
 			} catch (UnknownHostException e) {
 				System.out.println("Could not reach server "+host+":"+Integer.toString(port)+" - "+e.getMessage());
 				System.exit(1);
@@ -61,6 +79,7 @@ public class CommandLineInterface {
 			runClient(false);
 		}
 		
+		return true; // TODO We need to check that the password was correct if we are verifying this.
 	}
 	
 	private void runClient(boolean admin){
@@ -107,6 +126,29 @@ public class CommandLineInterface {
 	        System.exit(1);
 	    }
 		return r;
+	}
+
+	@Override
+	public void returnToLogin(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addMessage(String message) {
+		System.out.println(message);
+	}
+
+	@Override
+	public void updateRooms(List<String> rooms) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateUsers(List<String> users) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
